@@ -1,0 +1,134 @@
+body{
+    color: darkslategray;
+}
+.h-avb{
+    height: -webkit-fill-available;
+}
+.form-control:focus,
+.btn:focus{
+    border-color: gainsboro !important;
+    box-shadow: 0 0 0.2rem #8564043b !important;
+}
+.dropdown-item.active,
+.dropdown-item:active{
+    background-color: #8564043b !important;
+}
+.table thead th {
+    background-color: #d2b48ca1 !important;
+    border: 0 !important;
+}
+.table td, .table th {
+    border-top-color: #721c2440 !important;
+}
+.table-hover tbody tr:hover {
+    background-color: antiquewhite !important;
+}
+#sidebar-wrapper {
+    height: 100%;
+    overflow-y: auto;
+    background: beige;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+}
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: auto;
+    margin: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: rgb(61, 61, 61);
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #5a5858;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+@media(min-width:768px) {
+
+    #sidebar-wrapper {
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+.px-10{
+    padding-left: 15%;
+    padding-right: 15%;
+}
+.btn-dd{
+    background-color: beige !important;
+    border-width: 0 !important;
+    margin-left: 10px;
+    max-width: 200px;
+    width: inherit;
+}
+.btn-beige{
+    color: darkslategrey !important;
+    background: beige !important;
+    border-width: 0;
+    padding: 3%;
+}
+.dropdown{
+    width: 200px;
+    max-width: 200px;
+    min-width: min-content;
+}
+.title{
+    height: fit-content;
+    background-color: antiquewhite;
+}
