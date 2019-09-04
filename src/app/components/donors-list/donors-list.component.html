@@ -1,60 +1,80 @@
 <div class="title text-center">
   <h3>Lista dobrovoljnih davalaca krvi</h3>
 </div>
-<div class="btn-group my-3" role="group" aria-label="Basic example">
-  <div class="dropdown">
-    <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">{{selectedSorting || 'Sortiranje'}}
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-      <a class="dropdown-item" *ngFor="let st of sortTypes" (click)="selectedSorting=st">{{st}}</a>
+<div>
+    <form class="form-inline justify-content-center mt-3">
+        <input class="form-control mr-sm-2 col-4" type="search" placeholder="Pretraga" aria-label="Pretraga">
+        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Pretraži</button>
+      </form>
+</div>
+<div class="btn-toolbar justify-content-between px-2" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group my-3" role="group">
+    <button class="btn btn-beige">Dodaj donaciju <i class="fa fa-plus"></i></button>
     </div>
-  </div>
-  <div *ngIf="selectedSorting==='Krvna grupa'" class="dropdown">
-      <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">{{selectedBloodType}}
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <a class="dropdown-item" *ngFor="let bt of bloodTypes" (click)="selectedBloodType=bt">{{bt}}</a>
-      </div>
-    </div>
-    <div class="dropdown">
-        <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">{{selectedDirection || 'Smjer'}}
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-          <a class="dropdown-item" (click)="selectedDirection='Rastući'">Rastući</a>
-          <a class="dropdown-item" (click)="selectedDirection='Opadajući'">Opadajući</a>
+    <div class="btn-group my-3" role="group">
+        <div class="dropdown">
+          <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">{{selectedSorting || 'Sortiranje'}}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            <a class="dropdown-item" *ngFor="let st of sortTypes" (click)="changeSortOrder(st)">{{st}}</a>
+          </div>
         </div>
+        <div *ngIf="selectedSorting==='Krvna grupa'" class="dropdown">
+            <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">{{selectedBloodType}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <a class="dropdown-item" *ngFor="let bt of bloodTypes" (click)="selectedBloodType=bt">{{bt}}</a>
+            </div>
+          </div>
+          <div class="dropdown">
+              <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">{{selectedDirection || 'Smjer'}}
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                <a class="dropdown-item" (click)="selectedDirection='Rastući'">Rastući</a>
+                <a class="dropdown-item" (click)="selectedDirection='Opadajući'">Opadajući</a>
+              </div>
+            </div>
       </div>
 </div>
-
 <table class="table table-hover">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">R.br</th>
+      <th scope="col">Ime i prezime</th>
+      <th scope="col">Datum rodjenja</th>
+      <th scope="col">Krvna grupa</th>
+      <th scope="col">Prebivalište</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
+    <tr *ngFor="let d of donors; index as i ">
+      <th scope="row">{{this.currentPage+i+1}}</th>
+      <td>{{d.firstName}} {{d.lastName}}</td>
+      <td>{{d.birthDate | date: 'dd-MM-yyyy'}}</td>
+      <td>{{d.bloodType}}</td>
+      <td>{{d.address}}</td>
+      <td><button [routerLink]="['/donor',d.id]">Detalji</button></td>
+      <td><button>Izmjeni</button></td>
+      <td><button>Obriši</button></td>
     </tr>
   </tbody>
 </table>
+
+<ul class="nav nav-pills justify-content-center py-4">
+  <li *ngIf="currentPage>0" class="nav-item">
+    <a class="btn btn-beige nav-link"
+      (click)="loadDonors(currentPage-1,selectedSorting)">
+      <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+  </li>
+  <li *ngIf="currentPage+1<totalPages" class="nav-item">
+    <a class="btn btn-beige nav-link"
+      (click)="loadDonors(currentPage+1,selectedSorting)">
+      <i class="fa fa-chevron-right" aria-hidden="true"></i> </a>
+  </li>
+</ul>

@@ -12,8 +12,14 @@ import { SidemenuComponent } from './components/sidemenu/sidemenu.component';
 import { DonorsListComponent } from './components/donors-list/donors-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { AuthenticationService } from './services/authentication.service';
-import { AuthHttpInterceptorService } from './services/auth-http-interceptor.service';
+import { httpInterceptorProviders } from './services/auth-http-interceptor.service';
+import { DonatorInfoComponent } from './components/donator-info/donator-info.component';
+import { DonationInfoComponent } from './components/donation-info/donation-info.component';
+import { DonationListComponent } from './components/donation-list/donation-list.component';
+import { DonorProfileComponent } from './components/donor-profile/donor-profile.component';
+import { DonationsComponent } from './components/donations/donations.component';
 
 @NgModule({
   declarations: [
@@ -24,16 +30,22 @@ import { AuthHttpInterceptorService } from './services/auth-http-interceptor.ser
     HeaderComponent,
     FooterComponent,
     SidemenuComponent,
-    DonorsListComponent
+    DonorsListComponent,
+    DonatorInfoComponent,
+    DonationInfoComponent,
+    DonationListComponent,
+    DonorProfileComponent,
+    DonationsComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    AngularFontAwesomeModule,
     AppRoutingModule
   ],
-  providers: [AuthenticationService,AuthHttpInterceptorService],
+  providers: [AuthenticationService,httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

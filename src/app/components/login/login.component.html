@@ -9,7 +9,7 @@
                 [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
             <div *ngIf="submitted && !!f.email.errors" class="invalid-feedback">
                 <div *ngIf="!!f.email.errors.required">Email je obavezno polje</div>
-                <div *ngIf="!!f.email.errors.email">Email nije ispravna</div>
+                <div *ngIf="!!f.email.errors.email">Email nije ispravan</div>
             </div>
         </div>
     </div>

@@ -1,0 +1,14 @@
+<div class="title text-center">
+    <h3>Informacije o davaocu</h3>
+</div>
+<div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group my-3" role="group">
+        <button type="button" class="btn btn-beige" (click)="editMode=!editMode">Izmjeni</button>
+        <button type="button" class="btn btn-beige ml-2">Arhiviraj</button>
+    </div>
+</div>
+<app-donator-info *ngIf="donor!=null" [mode]="editMode? 1 : 2" [user]="donor" (validSubmit)="submit($event)">
+</app-donator-info>
+<div class="alert alert-danger">
+    {{errorMsg}}
+</div>

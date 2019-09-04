@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sidemenu',
@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidemenuComponent implements OnInit {
 
+  loggedUserId: number;
+
   constructor() { }
 
   ngOnInit() {
+    if(sessionStorage.getItem('id')){
+      this.loggedUserId=Number.parseInt(sessionStorage.getItem('id'));
+    }
+    else{
+      this.loggedUserId=null;
+    }
   }
 
 }

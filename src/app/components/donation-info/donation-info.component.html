@@ -1,0 +1,77 @@
+<div class="title text-center">
+    <h3>Informacije o donaciji</h3>
+</div>
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-4 col-12">
+
+            <div class="title text-center">
+                <h5>Davalac</h5>
+            </div>
+            <div class="card text-center">
+                    <div class="card-body">
+                      <h5 class="card-title">{{donation.donor.firstName}} {{donation.donor.lastName}}</h5>
+                      <p class="card-text"></p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">{{donation.donor.bloodType}}</li>
+                      <li class="list-group-item">{{donation.donor.phone}}</li>
+                      <li class="list-group-item">{{donation.donor.address}}</li>
+                    </ul>
+                    <div class="card-body">
+                      <a href="#" class="card-link">Ostale donacije</a>
+                    </div>
+                  </div>
+        </div>
+        <div class="col-md-8 col-12">
+
+            <div class="title text-center">
+                <h5>Detalji</h5>
+            </div>
+            <form>
+                <div class="row">
+                    <div class="col-md-6 col-12 form-group">
+                        <label>Doza:</label>
+                        <input type="text" class="form-control" disabled="true" value="{{donation.dose}} ml">
+                    </div>
+                    <div class="col-md-6 col-12 form-group">
+                            <label>Testirano:</label>
+                            <input type="text" class="form-control" disabled="true"
+                                value="{{donation.tested? 'DA' : 'NE'}}">
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-12 form-group">
+                        <label>Datum:</label>
+                        <input type="text" class="form-control" disabled="true"
+                            value="{{donation.date | date: 'dd-MM-yyyy'}}">
+                    </div>
+                    <div class="col-md-6 col-12 form-group">
+                        <label>Lokacija:</label>
+                        <input type="text" class="form-control" disabled="true" value="{{donation.location}}">
+                    </div>
+                </div>
+                <div class="title text-center">
+                    <h5>Pregled</h5>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-12 form-group">
+                        <label>Pritisak:</label>
+                        <input type="text" class="form-control" disabled="true"
+                            value="{{donation.systolic}}/{{donation.diastolic}}">
+                    </div>
+                    <div class="col-md-6 col-12 form-group">
+                        <label>Težina:</label>
+                        <input type="text" class="form-control" disabled="true" value="{{donation.weigth}}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Napomena:</label>
+                        <textarea class="form-control" disabled="true" value="{{donation.additional}}"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

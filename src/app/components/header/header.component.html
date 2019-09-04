@@ -9,17 +9,28 @@
           <a class="nav-link" href="#">Evidencija dobrovoljnih davalaca krvi</a>
         </li>
       </ul>
-      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        <ul *ngIf="korisnik; else gost" class="navbar-nav ml-auto mt-2 mt-lg-0">
           <li class="nav-item">
-            <a class="nav-link"
-                [routerLink]="['/login']">Login</a>
+            <a class="nav-link">{{korisnik}}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disable" href="">or</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/register']">Register</a>
+              <a class="nav-link" role="link" (click)="logout()">Odjavi se</a>
             </li>
         </ul>
+      <ng-template #gost>
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link"
+                [routerLink]="['/login']">Ulogujte se</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disable" href="">ili</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/register']">Registrujte se</a>
+            </li>
+        </ul>
+      </ng-template>
+      
     </div>
   </nav>

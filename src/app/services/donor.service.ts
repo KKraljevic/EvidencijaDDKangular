@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../model/user';
 import { Donation } from '../model/donation';
@@ -18,7 +18,16 @@ export class DonorService {
   }
 
   public createDonor(donor: User): Observable<User> {
-    return this.http.post<User>(this.springURL + '/api/donators', donor);
+    return this.http.post<User>(this.springURL + '/api/auth/signup', donor);
+  }
+
+  public getDonors(page?: number, sort?: number) {
+    let sortCriterias = ["firstName", "lastName","birthDate", "bloodType"];
+    let params = new HttpParams();
+    params = Number.isInteger(page) ? params.append('page', page.toString()) : params;
+    params = Number.isInteger(sort) ? params.append('sort', sortCriterias[sort]) : params;
+    params = params.append('size','1');
+    return this.http.get(this.springURL + '/api/donators', { params: params });
   }
 
   public getActiveDonorsByBloodType(bloodType: string) {
