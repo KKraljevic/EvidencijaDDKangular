@@ -1,6 +1,12 @@
 <div class="title text-center">
     <h3>Informacije o donaciji</h3>
 </div>
+<div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group my-3" role="group">
+            <button type="button" class="btn btn-beige">Izmjeni</button>
+            <button type="button" class="btn btn-beige ml-2">Arhiviraj</button>
+        </div>
+    </div>
 <div class="container mt-2">
     <div class="row">
         <div class="col-md-4 col-12">
@@ -9,22 +15,21 @@
                 <h5>Davalac</h5>
             </div>
             <div class="card text-center">
-                    <div class="card-body">
-                      <h5 class="card-title">{{donation.donor.firstName}} {{donation.donor.lastName}}</h5>
-                      <p class="card-text"></p>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                      <li class="list-group-item">{{donation.donor.bloodType}}</li>
-                      <li class="list-group-item">{{donation.donor.phone}}</li>
-                      <li class="list-group-item">{{donation.donor.address}}</li>
-                    </ul>
-                    <div class="card-body">
-                      <a href="#" class="card-link">Ostale donacije</a>
-                    </div>
-                  </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{donation.donor.firstName}} {{donation.donor.lastName}}</h5>
+                    <p class="card-text"></p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{donation.donor.blood}}</li>
+                    <li class="list-group-item">{{donation.donor.phone}}</li>
+                    <li class="list-group-item">{{donation.donor.address}}</li>
+                </ul>
+                <div class="card-body">
+                    <a [routerLink]="['/donors',donation.donor.id,'donacije']" class="card-link">Ostale donacije</a>
+                </div>
+            </div>
         </div>
         <div class="col-md-8 col-12">
-
             <div class="title text-center">
                 <h5>Detalji</h5>
             </div>
@@ -35,10 +40,10 @@
                         <input type="text" class="form-control" disabled="true" value="{{donation.dose}} ml">
                     </div>
                     <div class="col-md-6 col-12 form-group">
-                            <label>Testirano:</label>
-                            <input type="text" class="form-control" disabled="true"
-                                value="{{donation.tested? 'DA' : 'NE'}}">
-                        </div>
+                        <label>Testirano:</label>
+                        <input type="text" class="form-control" disabled="true"
+                            value="{{donation.tested? 'DA' : 'NE'}}">
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-12 form-group">

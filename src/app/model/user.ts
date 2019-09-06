@@ -13,7 +13,7 @@ export class User {
     address: string;
     phone: string;
     profession: string;
-    bloodType: string;
+    blood: string;
     active: boolean;
     roles: Role[];
 

@@ -20,6 +20,7 @@ import { DonationInfoComponent } from './components/donation-info/donation-info.
 import { DonationListComponent } from './components/donation-list/donation-list.component';
 import { DonorProfileComponent } from './components/donor-profile/donor-profile.component';
 import { DonationsComponent } from './components/donations/donations.component';
+import { NewDonationComponent } from './components/new-donation/new-donation.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DonationsComponent } from './components/donations/donations.component';
     DonationInfoComponent,
     DonationListComponent,
     DonorProfileComponent,
-    DonationsComponent
+    DonationsComponent,
+    NewDonationComponent
   ],
   imports: [
     BrowserModule,

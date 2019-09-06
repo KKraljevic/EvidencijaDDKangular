@@ -1,0 +1,15 @@
+.carousel-item img {
+    height: 400px;
+    max-height: 400px;
+    object-fit: cover;
+}
+.list-card {
+    border: 2px;
+    border-style: solid;
+    border-color: gainsboro;
+    box-shadow:2px 2px 2px gray;
+}
+.card-img-top {
+    height: fit-content;
+    object-fit: cover;
+}

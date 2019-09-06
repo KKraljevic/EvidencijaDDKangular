@@ -10,6 +10,7 @@ import { Donation } from '../model/donation';
 export class DonorService {
 
   springURL: string = 'http://localhost:8080';
+  sortCriterias = ["firstName", "lastName", "birthDate", "bloodType"];
 
   constructor(private http: HttpClient) { }
 
@@ -21,21 +22,32 @@ export class DonorService {
     return this.http.post<User>(this.springURL + '/api/auth/signup', donor);
   }
 
-  public getDonors(page?: number, sort?: number) {
-    let sortCriterias = ["firstName", "lastName","birthDate", "bloodType"];
+  public getDonors(page?: number, sort?: number, bloodType?: string) {
     let params = new HttpParams();
     params = Number.isInteger(page) ? params.append('page', page.toString()) : params;
-    params = Number.isInteger(sort) ? params.append('sort', sortCriterias[sort]) : params;
-    params = params.append('size','1');
-    return this.http.get(this.springURL + '/api/donators', { params: params });
+    if (sort < 3 || sort === null || sort === undefined) {
+      params = Number.isInteger(sort) ? params.append('sort', this.sortCriterias[sort]) : params;
+      return this.http.get(this.springURL + '/api/donators', { params: params });
+    }
+    else {
+      if (bloodType.endsWith('+')) {
+        bloodType = bloodType.replace('+', 'POS');
+      }
+      else {
+        bloodType = bloodType.replace('-', 'NEG');
+      }
+      return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType, { params: params });
+    }
   }
 
   public getActiveDonorsByBloodType(bloodType: string) {
-    return this.http.get(this.springURL + '/api/donators/' + bloodType + '/active');
+    return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType + '/active');
   }
 
-  public getDonationsByDonor(donorId: number) {
-    return this.http.get(this.springURL + '/api/donators/' + donorId + '/donations');
+  public getDonationsByDonor(donorId: number, page: number) {
+    let params = new HttpParams();
+    params = Number.isInteger(page) ? params.append('page', page.toString()) : params;
+    return this.http.get(this.springURL + '/api/donators/' + donorId + '/donations', { params: params });
   }
 
   public addDonation(donorId: number, donation: Donation) {

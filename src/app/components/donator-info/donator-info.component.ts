@@ -86,7 +86,7 @@ export class DonatorInfoComponent implements OnInit {
     this.donorInfoForm.get('lastName').setValue(user.lastName);
     this.donorInfoForm.get('email').setValue(user.email);
     this.donorInfoForm.get('gender').setValue(user.gender.toLowerCase());
-    this.donorInfoForm.get('bloodType').setValue(this.formatBloodType(user.bloodType));
+    this.donorInfoForm.get('bloodType').setValue(this.formatBloodType(user.blood));
     this.donorInfoForm.get('parentName').setValue(user.parentName);
     this.donorInfoForm.get('phone').setValue(user.phone);
     this.donorInfoForm.get('jmb').setValue(user.jmb);
@@ -141,10 +141,10 @@ export class DonatorInfoComponent implements OnInit {
       this.newUser.address=this.donorInfoForm.get('address').value;
 
       if (this.donorInfoForm.get('bloodType').value.endsWith('+')) {
-        this.newUser.bloodType = this.donorInfoForm.get('bloodType').value.replace('+', 'POS');
+        this.newUser.blood = this.donorInfoForm.get('bloodType').value.replace('+', 'POS');
       }
       else {
-        this.newUser.bloodType = this.donorInfoForm.get('bloodType').value.replace('-', 'NEG');
+        this.newUser.blood = this.donorInfoForm.get('bloodType').value.replace('-', 'NEG');
       }
 
       if (this.mode === 0) {

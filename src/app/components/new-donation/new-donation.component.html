@@ -1,0 +1,55 @@
+<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group my-3" role="group">
+            <button type="button" class="btn btn-beige">Izmjeni</button>
+            <button type="button" class="btn btn-beige ml-2">Arhiviraj</button>
+        </div>
+    </div>
+<div class="col-md-8 col-12">
+        <div class="title text-center">
+            <h5>Detalji</h5>
+        </div>
+        <form>
+            <div class="row">
+                <div class="col-md-6 col-12 form-group">
+                    <label>Doza:</label>
+                    <input type="text" class="form-control" disabled="true" value="{{donation.dose}} ml">
+                </div>
+                <div class="col-md-6 col-12 form-group">
+                    <label>Testirano:</label>
+                    <input type="text" class="form-control" disabled="true"
+                        value="{{donation.tested? 'DA' : 'NE'}}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-12 form-group">
+                    <label>Datum:</label>
+                    <input type="text" class="form-control" disabled="true"
+                        value="{{donation.date | date: 'dd-MM-yyyy'}}">
+                </div>
+                <div class="col-md-6 col-12 form-group">
+                    <label>Lokacija:</label>
+                    <input type="text" class="form-control" disabled="true" value="{{donation.location}}">
+                </div>
+            </div>
+            <div class="title text-center">
+                <h5>Pregled</h5>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-12 form-group">
+                    <label>Pritisak:</label>
+                    <input type="text" class="form-control" disabled="true"
+                        value="{{donation.systolic}}/{{donation.diastolic}}">
+                </div>
+                <div class="col-md-6 col-12 form-group">
+                    <label>Težina:</label>
+                    <input type="text" class="form-control" disabled="true" value="{{donation.weigth}}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label>Napomena:</label>
+                    <textarea class="form-control" disabled="true" value="{{donation.additional}}"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>

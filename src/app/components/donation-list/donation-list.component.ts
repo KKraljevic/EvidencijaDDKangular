@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { DonationService } from 'src/app/services/donation.service';
+import { Component, OnInit, Input } from '@angular/core';
 import { Donation } from 'src/app/model/donation';
 
 @Component({
@@ -9,16 +8,22 @@ import { Donation } from 'src/app/model/donation';
 })
 export class DonationListComponent implements OnInit {
 
-  donations: Donation[] = [];
+  @Input() donations: Donation[] = [];
+  @Input() currentPage: number = 0;
 
-  constructor( private donationService: DonationService) { }
+  constructor( ) { }
 
   ngOnInit() {
-    this.donationService.getDonations().subscribe(data => {
-      if(data!=null) {
-          this.donations=<Donation[]>data;
-      }
-    });
+    
   }
 
+  formatBloodType(bt: string) {
+    if (bt.endsWith('POS')) {
+      return bt.replace('POS', '+')
+    }
+    else {
+      return bt.replace('NEG', '-');
+    }
+  }
+  
 }

@@ -25,25 +25,39 @@ export class DonorsListComponent implements OnInit {
   constructor(private donorService: DonorService) { }
 
   ngOnInit() {
-    this.selectedBloodType = this.bloodTypes[0];
-
     this.loadDonors();
+  }
+
+  formatBloodType(bt: string) {
+    if (bt.endsWith('POS')) {
+      return bt.replace('POS', '+')
+    }
+    else {
+      return bt.replace('NEG', '-');
+    }
   }
 
   changeSortOrder(newSorting: string) {
     if (newSorting != this.selectedSorting) {
       this.selectedSorting = newSorting;
-      this.loadDonors(0, newSorting);
+      if (this.sortTypes.indexOf(newSorting) < 3) {
+        this.loadDonors(0, newSorting);
+      }
     }
-
+  }
+  chooseBloodType(bt: string) {
+    if(bt!=this.selectedBloodType) {
+      this.selectedBloodType=bt;
+      this.loadDonors(0,this.selectedSorting,bt);
+    }
   }
 
-  loadDonors(page?: number, sort?: string) {
+  loadDonors(page?: number, sort?: string, bloodType?: string) {
     let sortNumber = undefined;
     if (sort != null || sort != undefined) {
       sortNumber = this.sortTypes.indexOf(sort);
     }
-    this.donorService.getDonors(page, sortNumber).subscribe(data => {
+    this.donorService.getDonors(page, sortNumber, bloodType).subscribe(data => {
       if (data['totalElements'] === 0) {
         this.notFoundMsg = "Davaoci nisu pronađeni!";
       }

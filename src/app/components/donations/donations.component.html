@@ -2,14 +2,15 @@
     <h3>Lista donacija</h3>
 </div>
 <div>
-    <form class="form-inline justify-content-center mt-3">
-        <input class="form-control mr-sm-2 col-4" type="search" placeholder="Pretraga" aria-label="Pretraga">
+    <form [formGroup]="searchForm" (ngSubmit)="searchItems()"class="form-inline justify-content-center mt-3"
+    [ngClass]="{ 'is-invalid': submitted && this.searchForm?.search?.errors }">
+        <input formControlName="search" type="text" autocomplete="off" class="form-control mr-sm-2 col-4" type="search" placeholder="Pretraga" aria-label="Pretraga">
         <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Pretraži</button>
     </form>
 </div>
 <div class="btn-toolbar justify-content-between px-2" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group my-3" role="group">
-        <button class="btn btn-beige">Dodaj donaciju <i class="fa fa-plus"></i></button>
+        <button class="btn btn-beige" [routerLink]="['/donations/new']">Dodaj donaciju <i class="fa fa-plus"></i></button>
     </div>
     <div class="btn-group my-3" role="group">
         <div class="dropdown">
@@ -25,10 +26,10 @@
                 aria-haspopup="true" aria-expanded="false">{{selectedBloodType}}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <a class="dropdown-item" *ngFor="let bt of bloodTypes" (click)="selectedBloodType=bt">{{bt}}</a>
+                <a class="dropdown-item" *ngFor="let bt of bloodTypes" (click)="chooseBloodType(bt)">{{bt}}</a>
             </div>
         </div>
-        <div class="dropdown">
+        <div *ngIf="selectedSorting!='Krvna grupa'" class="dropdown">
             <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">{{selectedDirection || 'Smjer'}}
             </button>
@@ -39,5 +40,28 @@
         </div>
     </div>
 </div>
+<ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link" (click)="loadDonations(0,0,selectedSorting,selectedDirection,selectedBloodType)" [class.active]="activeTab===0">Sve</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="loadDonations(1,0,selectedSorting,selectedDirection,selectedBloodType)" [class.active]="activeTab===1">Testirane</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="loadDonations(2,0,selectedSorting,selectedDirection,selectedBloodType)" [class.active]="activeTab===2">Netestirane</a>
+        </li>
+</ul>
+<app-donation-list [donations]="donations" [currentPage]="currentPage"></app-donation-list>
 
-<app-donation-list></app-donation-list>
+<ul class="nav nav-pills justify-content-center py-4">
+        <li *ngIf="currentPage>0" class="nav-item">
+          <a class="btn btn-beige nav-link"
+            (click)="loadDonations(activeTab,currentPage-1,selectedSorting,selectedDirection,selectedBloodType)">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+        </li>
+        <li *ngIf="currentPage+1<totalPages" class="nav-item">
+          <a class="btn btn-beige nav-link"
+            (click)="loadDonations(activeTab,currentPage+1,selectedSorting,selectedDirection,selectedBloodType)">
+            <i class="fa fa-chevron-right" aria-hidden="true"></i> </a>
+        </li>
+</ul>

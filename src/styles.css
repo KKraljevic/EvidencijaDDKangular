@@ -27,6 +27,10 @@ textarea.form-control:disabled {
 .card {
     border-radius: 0 !important;
 }
+.card-link {
+    color: #c83739 !important;
+    font-weight: 600;
+}
 .dropdown-item.active,
 .dropdown-item:active{
     background-color: #8564043b !important;
@@ -88,6 +92,14 @@ i {
     width: 200px;
     max-width: 200px;
     min-width: min-content;
+}
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #c83739 !important;
+    font-weight: 600;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 .title{
     height: fit-content;
