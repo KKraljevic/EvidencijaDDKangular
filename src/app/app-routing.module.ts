@@ -8,18 +8,21 @@ import { DonorProfileComponent } from './components/donor-profile/donor-profile.
 import { DonationInfoComponent } from './components/donation-info/donation-info.component';
 import { DonationsComponent } from './components/donations/donations.component';
 import { NewDonationComponent } from './components/new-donation/new-donation.component';
+import { ArchiveComponent } from './components/archive/archive.component';
+import { DonorsComponent } from './components/donors/donors.component';
 
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
-  { path: 'donors/search/:search', component: DonorsListComponent},
+  { path: 'donors/search/:search', component: DonorsListComponent },
   { path: 'donors/:id/:tab', component: DonorProfileComponent },
   { path: 'donors/:id', component: DonorProfileComponent },
-  { path: 'donors', component: DonorsListComponent },
-  { path: 'donations/search/:search', component: DonationsComponent},
+  { path: 'donors', component: DonorsComponent },
+  { path: 'donations/search/:search', component: DonationsComponent },
   { path: 'donations/new', component: NewDonationComponent },
   { path: 'donations/:id', component: DonationInfoComponent },
-  { path: 'donations', component: DonationsComponent},
+  { path: 'donations', component: DonationsComponent },
+  { path: 'archive', component: ArchiveComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent }
 ];

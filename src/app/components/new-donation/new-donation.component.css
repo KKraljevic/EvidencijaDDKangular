@@ -1,0 +1,38 @@
+.dropdown-menu{
+    overflow-y:scroll;
+    overflow:auto;
+    max-height: 280px;
+  }
+  .dropdown-menu,
+  .dropdown input,
+  .dropdown button{
+      min-width: fit-content;
+      width: -webkit-fill-available;
+      font-size: 1rem;
+      line-height: 1.5;
+      text-align: left;
+      border-radius: 0;
+      border: 3px solid #ECECEC;
+  }
+  .dropdown-item.active{
+      background-color: var(--purple);
+      color: white;
+  }
+.multi-control-group .form-control:first-child {
+    border-right-width: 0;
+}
+.multi-control-group .form-control:last-child {
+    border-left-width: 0;
+}
+.multi-control-group .input-group-addon:not(.last-addon) {
+    border-right-width: 0;
+}
+
+.multi-control-group .input-group-addon:not(.first-addon) {
+    border-left-width: 0;
+}
+
+.multi-control-group .input-group-addon{
+    border-top-width:  1px;
+    border-bottom-width: 1px;
+}

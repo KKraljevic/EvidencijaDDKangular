@@ -54,11 +54,11 @@ export class DonationService {
 
   }
 
-  public findDonations(search: string, page?: number, sort?: number) {
+  public findDonations(search: string, active: boolean, page?: number, sort?: number) {
     let params = new HttpParams();
     params = Number.isInteger(page) ? params.append('page', page.toString()) : params;
     params = Number.isInteger(sort) ? params.append('sort', this.sortCriterias[sort]) : params;
-
+    params = params.append('active', active.toString());
     if (search != '' && search != null) {
       params = params.append('search', search);
       return this.http.get(this.springURL + '/api/donations/search', { params: params })

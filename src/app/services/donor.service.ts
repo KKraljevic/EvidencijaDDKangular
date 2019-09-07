@@ -10,7 +10,8 @@ import { Donation } from '../model/donation';
 export class DonorService {
 
   springURL: string = 'http://localhost:8080';
-  sortCriterias = ["firstName", "lastName", "birthDate", "bloodType"];
+  sortCriterias = ["firstName", "lastName", "birthDate", "address", "bloodType"];
+  sortDirections = [",desc", ",asc"];
 
   constructor(private http: HttpClient) { }
 
@@ -22,12 +23,26 @@ export class DonorService {
     return this.http.post<User>(this.springURL + '/api/auth/signup', donor);
   }
 
-  public getDonors(page?: number, sort?: number, bloodType?: string) {
+  public getDonors(tab: number, active: boolean, page?: number, sort?: number, direction?: number, bloodType?: string) {
     let params = new HttpParams();
     params = Number.isInteger(page) ? params.append('page', page.toString()) : params;
-    if (sort < 3 || sort === null || sort === undefined) {
-      params = Number.isInteger(sort) ? params.append('sort', this.sortCriterias[sort]) : params;
-      return this.http.get(this.springURL + '/api/donators', { params: params });
+    params = params.append('active', active.toString());
+
+    if (sort < 4 || sort === null || sort === undefined) {
+      if (direction != null && direction != undefined) {
+        params = Number.isInteger(sort) ? params.append('sort', this.sortCriterias[sort] + this.sortDirections[direction - 1]) : params;
+      }
+      else {
+        params = Number.isInteger(sort) ? params.append('sort', this.sortCriterias[sort]) : params;
+      }
+      switch (tab) {
+        case 0:
+          return this.http.get(this.springURL + '/api/donators', { params: params });
+        case 1:
+          return this.http.get(this.springURL + '/api/donators/active/available', { params: params });
+        case 2:
+          return this.http.get(this.springURL + '/api/donators/active/unavailable', { params: params });
+      }
     }
     else {
       if (bloodType.endsWith('+')) {
@@ -36,8 +51,36 @@ export class DonorService {
       else {
         bloodType = bloodType.replace('-', 'NEG');
       }
-      return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType, { params: params });
+      switch (tab) {
+        case 0:
+          return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType, { params: params });
+        case 1:
+          return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType + '/active/available', { params: params });
+        case 2:
+          return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType + '/active/unavailable', { params: params });
+      }
     }
+  }
+
+  public findDonors(search: string, active: boolean, page?: number, sort?: number) {
+    let params = new HttpParams();
+    params = Number.isInteger(page) ? params.append('page', page.toString()) : params;
+    params = Number.isInteger(sort) ? params.append('sort', this.sortCriterias[sort]) : params;
+    params = params.append('active', active.toString());
+    if (search != '' && search != null) {
+      params = params.append('search', search);
+      return this.http.get(this.springURL + '/api/donators/search', { params: params })
+    }
+    else {
+      return this.http.get(this.springURL + '/api/donators', { params: params })
+    }
+  }
+
+  public filterDonors(search: string) {
+    let params = new HttpParams();
+    params = params.append('search', search);
+    params = params.append('active', 'false');
+    return this.http.get(this.springURL + '/api/donators/filter', { params: params })
   }
 
   public getActiveDonorsByBloodType(bloodType: string) {

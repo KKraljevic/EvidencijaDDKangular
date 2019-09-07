@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { Donation } from 'src/app/model/donation';
-import { DonationService } from 'src/app/services/donation.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { DonorService } from 'src/app/services/donor.service';
+import { User } from 'src/app/model/user';
 
 @Component({
-  selector: 'app-donations',
-  templateUrl: './donations.component.html',
-  styleUrls: ['./donations.component.css']
+  selector: 'app-donors',
+  templateUrl: './donors.component.html',
+  styleUrls: ['./donors.component.css']
 })
-export class DonationsComponent implements OnInit {
+export class DonorsComponent implements OnInit {
 
-  donations: Donation[] = [];
+  donors: User[] = [];
 
   bloodTypes: string[] = ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'];
   selectedBloodType: string;
-  sortTypes: string[] = ['Ime', 'Prezime', 'Godine', 'Lokacija', 'Krvna grupa'];
+  sortTypes: string[] = ['Ime', 'Prezime', 'Godine', 'Prebivalište', 'Krvna grupa'];
   selectedSorting: string;
   selectedDirection: string;
 
   activeTab: number = 0;
-  currentPage: number = 0;
   totalPages: number;
+  currentPage: number = 0;
 
   searchForm: FormGroup;
   submitted: boolean = false;
@@ -29,17 +28,25 @@ export class DonationsComponent implements OnInit {
   notFoundMsg: string;
   loaded: boolean = false;
 
-  constructor(private router: Router, private donationService: DonationService, private fb: FormBuilder) { }
+  constructor(private donorService: DonorService, private fb: FormBuilder) { }
 
   ngOnInit() {
-
     this.searchForm = this.fb.group({
       search: ['', [Validators.maxLength(30)]]
     });
 
     this.selectedSorting = this.sortTypes[0];
     this.selectedDirection = 'Opadajući';
-    this.loadDonations(0, this.currentPage, this.selectedSorting, this.selectedDirection);
+    this.loadDonors(0, 0, this.selectedSorting, this.selectedDirection);
+  }
+
+  formatBloodType(bt: string) {
+    if (bt.endsWith('POS')) {
+      return bt.replace('POS', '+')
+    }
+    else {
+      return bt.replace('NEG', '-');
+    }
   }
 
   changeSortOrder(newSorting: string) {
@@ -48,11 +55,18 @@ export class DonationsComponent implements OnInit {
 
     if (newSorting != this.selectedSorting) {
       this.selectedSorting = newSorting;
-      this.selectedDirection = 'Opadajući';
+      //this.selectedDirection = 'Opadajući';
       if (this.sortTypes.indexOf(newSorting) != 4) {
         this.selectedBloodType = undefined;
-        this.loadDonations(this.activeTab, 0, newSorting, this.selectedDirection);
+        this.loadDonors(this.activeTab, 0, newSorting, this.selectedDirection);
       }
+    }
+  }
+
+  chooseBloodType(bt: string) {
+    if (bt != this.selectedBloodType) {
+      this.selectedBloodType = bt;
+      this.loadDonors(0, 0, this.selectedSorting, this.selectedDirection, bt);
     }
   }
 
@@ -62,15 +76,7 @@ export class DonationsComponent implements OnInit {
 
     if (newDirection != this.selectedDirection) {
       this.selectedDirection = newDirection;
-      this.loadDonations(this.activeTab, 0, this.selectedSorting, this.selectedDirection);
-    }
-  }
-
-  chooseBloodType(bt: string) {
-    if (bt != this.selectedBloodType) {
-      this.selectedBloodType = bt;
-      this.selectedDirection = 'Opadajući';
-      this.loadDonations(this.activeTab, 0, this.selectedSorting, this.selectedDirection, bt);
+      this.loadDonors(this.activeTab, 0, this.selectedSorting, this.selectedDirection);
     }
   }
 
@@ -86,7 +92,7 @@ export class DonationsComponent implements OnInit {
     return 1;
   }
 
-  loadDonations(tab: number, page?: number, sort?: string, direction?: string, bloodType?: string) {
+  loadDonors(tab: number, page?: number, sort?: string, direction?: string, bloodType?: string) {
     this.activeTab = (tab !== undefined) ? tab : this.activeTab;
     this.activeTab = this.activeTab > 2 ? 0 : this.activeTab;
 
@@ -104,11 +110,11 @@ export class DonationsComponent implements OnInit {
 
     console.log("Kriteri: \n" + tab + ',' + page + ',' + sortNumber + ',' + direction + ',' + bloodType);
 
-    this.donationService.getDonations(this.activeTab, true, page, sortNumber, this.convertDirection(direction), bloodType).subscribe(data => {
+    this.donorService.getDonors(this.activeTab, true, page, sortNumber, this.convertDirection(this.selectedDirection), bloodType).subscribe(data => {
       if (data['totalElements'] === 0) {
-        this.notFoundMsg = "Donacije nisu pronađene!";
+        this.notFoundMsg = "Davaoci nisu pronađeni!";
       }
-      this.donations = data['content'];
+      this.donors = data['content'];
       this.totalPages = data['totalPages'];
       this.currentPage = data['number'];
 
@@ -131,11 +137,11 @@ export class DonationsComponent implements OnInit {
 
     this.loaded = false;
 
-    this.donationService.findDonations(this.searchForm.get('search').value,true, 0, 0).subscribe(data => {
+    this.donorService.findDonors(this.searchForm.get('search').value, true, 0, 0).subscribe(data => {
       if (data['totalElements'] === 0) {
         this.notFoundMsg = "Donacije nisu pronađene!";
       }
-      this.donations = data['content'];
+      this.donors = data['content'];
       this.totalPages = data['totalPages'];
       this.currentPage = data['number'];
 

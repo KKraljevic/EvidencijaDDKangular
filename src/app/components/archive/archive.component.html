@@ -1,0 +1,68 @@
+<div class="title text-center">
+    <h3>Arhiva</h3>
+</div>
+<div>
+    <form [formGroup]="searchForm" (ngSubmit)="searchItems()" class="form-inline justify-content-center mt-3"
+        [ngClass]="{ 'is-invalid': submitted && this.searchForm?.search?.errors }">
+        <input formControlName="search" type="text" autocomplete="off" class="form-control mr-sm-2 col-4" type="search"
+            placeholder="Pretraga" aria-label="Pretraga">
+        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Pretraži</button>
+    </form>
+</div>
+<div class="btn-toolbar justify-content-end px-2" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group my-3" role="group">
+        <div class="dropdown">
+            <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">{{selectedSorting || 'Sortiranje'}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                <a class="dropdown-item" *ngFor="let st of sortTypes" (click)="changeSortOrder(st)">{{st}}</a>
+            </div>
+        </div>
+        <div *ngIf="selectedSorting==='Krvna grupa'" class="dropdown">
+            <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">{{selectedBloodType}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <a class="dropdown-item" *ngFor="let bt of bloodTypes" (click)="chooseBloodType(bt)">{{bt}}</a>
+            </div>
+        </div>
+        <div *ngIf="selectedSorting!='Krvna grupa'" class="dropdown">
+            <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">{{selectedDirection || 'Smjer'}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                <a class="dropdown-item" (click)="selectedDirection='Rastući'">Rastući</a>
+                <a class="dropdown-item" (click)="selectedDirection='Opadajući'">Opadajući</a>
+            </div>
+        </div>
+    </div>
+</div>
+<ul class="nav nav-pills">
+    <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab===0"
+        (click)="loadData(0,0,selectedSorting,selectedDirection,selectedBloodType)">Davaoci</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab===1"
+        (click)="loadData(1,0,selectedSorting,selectedDirection,selectedBloodType)">Donacije</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab===2">Obavještenja</a>
+    </li>
+</ul>
+<div [ngSwitch]="activeTab">
+    <app-donors-list *ngSwitchCase="0" [donors]="donors" [currentPage]="currentPage"></app-donors-list>
+    <app-donation-list *ngSwitchCase="1" [donations]="donations" [currentPage]="currentPage"></app-donation-list>
+</div>
+
+<ul class="nav nav-pills justify-content-center py-4">
+    <li *ngIf="currentPage>0" class="nav-item">
+        <a class="btn btn-beige nav-link" (click)="loadData(activeTab,currentPage-1,selectedSorting,selectedDirection,selectedBloodType)">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+    </li>
+    <li *ngIf="currentPage+1<totalPages" class="nav-item">
+        <a class="btn btn-beige nav-link" (click)="loadData(activeTab,currentPage+1,selectedSorting,selectedDirection,selectedBloodType)">
+            <i class="fa fa-chevron-right" aria-hidden="true"></i> </a>
+    </li>
+</ul>

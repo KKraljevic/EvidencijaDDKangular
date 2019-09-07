@@ -21,6 +21,8 @@ import { DonationListComponent } from './components/donation-list/donation-list.
 import { DonorProfileComponent } from './components/donor-profile/donor-profile.component';
 import { DonationsComponent } from './components/donations/donations.component';
 import { NewDonationComponent } from './components/new-donation/new-donation.component';
+import { ArchiveComponent } from './components/archive/archive.component';
+import { DonorsComponent } from './components/donors/donors.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { NewDonationComponent } from './components/new-donation/new-donation.com
     DonationListComponent,
     DonorProfileComponent,
     DonationsComponent,
-    NewDonationComponent
+    NewDonationComponent,
+    ArchiveComponent,
+    DonorsComponent
   ],
   imports: [
     BrowserModule,
