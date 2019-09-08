@@ -2,12 +2,12 @@
     <h3>Informacije o donaciji</h3>
 </div>
 <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group my-3" role="group">
-            <button type="button" class="btn btn-beige">Izmjeni</button>
-            <button type="button" class="btn btn-beige ml-2">Arhiviraj</button>
-        </div>
+    <div class="btn-group my-3" role="group">
+        <button type="button" class="btn btn-beige" (click)="changeMode()">Izmjeni</button>
+        <button type="button" class="btn btn-beige ml-2">Arhiviraj</button>
     </div>
-<div class="container mt-2">
+</div>
+<div *ngIf="donation" class="container mt-2">
     <div class="row">
         <div class="col-md-4 col-12">
 
@@ -20,12 +20,13 @@
                     <p class="card-text"></p>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{{donation.donor.blood}}</li>
+                    <li class="list-group-item">{{formatBloodType(donation.donor.blood)}}</li>
                     <li class="list-group-item">{{donation.donor.phone}}</li>
                     <li class="list-group-item">{{donation.donor.address}}</li>
                 </ul>
                 <div class="card-body">
-                    <a [routerLink]="['/donors',donation.donor.id,'donacije']" class="card-link">Ostale donacije</a>
+                    <a *ngIf="donation" [routerLink]="['/donors',donation.donor.id,'donacije']" class="card-link">Ostale
+                        donacije</a>
                 </div>
             </div>
         </div>
@@ -33,27 +34,65 @@
             <div class="title text-center">
                 <h5>Detalji</h5>
             </div>
-            <form>
+            <form [formGroup]="donationForm" (submit)="onSubmit()">
                 <div class="row">
                     <div class="col-md-6 col-12 form-group">
                         <label>Doza:</label>
-                        <input type="text" class="form-control" disabled="true" value="{{donation.dose}} ml">
+                        <input formControlName="dose" type="number" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.dose.errors }">
+                        <small class="text-muted">Najmanja doza: 350 ml</small>
+                        <div *ngIf="submitted && !!f.dose.errors" class="invalid-feedback">
+                            <div *ngIf="!!f.dose.errors.required">Doza je obavezno polje!</div>
+                            <div *ngIf="!!f.dose.errors.minlength || !!f.dose.errors.maxlength">Vrijednost doze je
+                                naispravna
+                            </div>
+                            <div *ngIf="!!f.dose.errors.min">Najmanja doza je 350 ml</div>
+                            <div *ngIf="!!f.dose.errors.max">Najveća doza je 450 ml</div>
+                        </div>
                     </div>
                     <div class="col-md-6 col-12 form-group">
                         <label>Testirano:</label>
-                        <input type="text" class="form-control" disabled="true"
-                            value="{{donation.tested? 'DA' : 'NE'}}">
+                        <br>
+                        <ng-container [ngTemplateOutlet]="editMode? radioBtns : txt"></ng-container>
+                        <ng-template #radioBtns>
+                            <input type="radio" value="true" formControlName="tested"
+                                [checked]="donationForm.get('tested').value===true">
+                            <span>Da</span>
+                            <input class="ml-3" type="radio" value="false" formControlName="tested"
+                                [checked]="donationForm.get('tested').value===false">
+                            <span>Ne</span>
+                            <div *ngIf="submitted && !!f.tested.errors" class="invalid-feedback d-block">
+                                <div *ngIf="!!f.tested.errors.required">Status testa je obavezno polje!</div>
+                            </div>
+                        </ng-template>
+                        <ng-template #txt>
+                            <input type="text" class="form-control" formControlName="tested"
+                                value="{{donationForm.get('tested').value? 'DA' : 'NE'}}">
+                        </ng-template>
+
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-12 form-group">
                         <label>Datum:</label>
-                        <input type="text" class="form-control" disabled="true"
-                            value="{{donation.date | date: 'dd-MM-yyyy'}}">
+                        <input formControlName="date" type="text" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.date.errors }"
+                            value="{{donationForm.get('date').value}}">
+                        <small class="text-muted">Format datuma: 21-01-2000</small>
+                        <div *ngIf="submitted && !!f.date.errors" class="invalid-feedback">
+                            <div *ngIf="!!f.date.errors.required">Datum je obavezno polje!</div>
+                            <div *ngIf="!!f.date.errors.pattern">Datum je neispravnog formata!</div>
+                            <div *ngIf="!!f.date.errors.incorrect">Datum je neispravan!</div>
+                        </div>
                     </div>
                     <div class="col-md-6 col-12 form-group">
                         <label>Lokacija:</label>
-                        <input type="text" class="form-control" disabled="true" value="{{donation.location}}">
+                        <input formControlName="location" type="text" placeholder="Naziv institucije, grad"
+                            class="form-control" [ngClass]="{ 'is-invalid': submitted && f.location.errors }">
+                        <div *ngIf="submitted && !!f.location.errors" class="invalid-feedback">
+                            <div *ngIf="!!f.location.errors.required">Lokacija je obavezno polje!</div>
+                            <div *ngIf="!!f.location.errors.maxlength">Lokacija je preduga!</div>
+                        </div>
                     </div>
                 </div>
                 <div class="title text-center">
@@ -62,18 +101,65 @@
                 <div class="row">
                     <div class="col-md-6 col-12 form-group">
                         <label>Pritisak:</label>
-                        <input type="text" class="form-control" disabled="true"
-                            value="{{donation.systolic}}/{{donation.diastolic}}">
+                        <ng-container [ngTemplateOutlet]="editMode? inputs : slash"></ng-container>
+                        <ng-template #inputs>
+                            <div class="input-group">
+                                <input formControlName="systolic" type="number" class="form-control col-6"
+                                    placeholder="120">
+                                <input formControlName="diastolic" type="number" class="form-control col-6"
+                                    placeholder="80">
+                            </div>
+                            <div *ngIf="submitted && (!!f.systolic.errors || !!f.diastolic.errors)"
+                                class="invalid-feedback d-block">
+                                <div
+                                    *ngIf="!!f.systolic.errors?.required || !!f.diastolic.errors?.required; else ostaleGreske">
+                                    Pritisak je obavezno polje!</div>
+                                <ng-template #ostaleGreske>
+                                    <div>Pritisak je neispravan!</div>
+                                </ng-template>
+                            </div>
+                        </ng-template>
+                        <ng-template #slash>
+                            <input readonly type="text" class="form-control" placeholder="120/80"
+                                value="{{donationForm.get('systolic').value}} / {{donationForm.get('diastolic').value}}">
+                        </ng-template>
+
                     </div>
                     <div class="col-md-6 col-12 form-group">
                         <label>Težina:</label>
-                        <input type="text" class="form-control" disabled="true" value="{{donation.weigth}}">
+                        <input formControlName="weight" type="number" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.weight.errors }">
+                        <small class="text-muted">Najmanja težina: 50kg</small>
+                        <div *ngIf="submitted && !!f.weight.errors" class="invalid-feedback">
+                            <div *ngIf="submitted && !!f.weight.errors.required; else ostaleGr">Težina je obavezno
+                                polje!
+                            </div>
+                            <ng-template #ostaleGr>
+                                <div>Težina je neisprava!</div>
+                            </ng-template>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Napomena:</label>
-                        <textarea class="form-control" disabled="true" value="{{donation.additional}}"></textarea>
+                        <textarea formControlName="additional" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div *ngIf="errMsg && loaded" class="row">
+                    <div class="col-md-12 form-group">
+                        <div class="alert alert-danger" role="alert">
+                            {{errMsg}}
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="editMode" class="row justify-content-center">
+                    <br>
+                    <div class="col-md-6 col-12">
+                        <input type="submit" class="btn btn-beige w-100" value="SAČUVAJ">
+                    </div>
+                    <div class="col-md-6 col-12 form-group">
+                        <input type="button" class="btn btn-beige w-100" (click)="currentValues()" value="OTKAŽI">
                     </div>
                 </div>
             </form>

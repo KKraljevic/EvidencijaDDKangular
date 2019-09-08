@@ -1,4 +1,5 @@
 import { Role } from './role';
+import { Donation } from './donation';
 
 export class User {
     id: number;
@@ -16,5 +17,6 @@ export class User {
     blood: string;
     active: boolean;
     roles: Role[];
+    donations?: Donation[];
 
 }

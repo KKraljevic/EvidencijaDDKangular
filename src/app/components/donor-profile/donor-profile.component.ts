@@ -3,6 +3,8 @@ import { DonorService } from 'src/app/services/donor.service';
 import { User } from 'src/app/model/user';
 import { ActivatedRoute } from '@angular/router';
 import { Donation } from 'src/app/model/donation';
+import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
+import { Role } from 'src/app/model/role';
 
 @Component({
   selector: 'app-donor-profile',
@@ -78,6 +80,13 @@ export class DonorProfileComponent implements OnInit {
   submit(userInfo: User) {
     console.log(userInfo);
     userInfo.id = this.donorId;
+    userInfo.roles=this.donor.roles;
+    if(userInfo.roles===null || !userInfo.roles.length) {
+      let role=new Role();
+      role.id=0;
+      role.name='ROLE_USER'
+      userInfo.roles.push(role);
+    }
     this.donorService.updateDonor(userInfo).subscribe(data => {
       console.log('Update resp:' + data);
     },

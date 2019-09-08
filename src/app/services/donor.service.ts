@@ -94,7 +94,7 @@ export class DonorService {
   }
 
   public addDonation(donorId: number, donation: Donation) {
-    return this.http.post(this.springURL + '/api/donator/' + donorId + '/donations', donation);
+    return this.http.post(this.springURL + '/api/donators/' + donorId + '/donations', donation);
   }
 
   public updateDonor(donor: User) {

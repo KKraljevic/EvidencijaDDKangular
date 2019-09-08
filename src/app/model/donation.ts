@@ -7,7 +7,7 @@ export class Donation {
     location: string;
     systolic:number;
     diastolic:number;
-    weigth:number;
+    weight:number;
     additional: string;
     tested: boolean;
     donor: User;

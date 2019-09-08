@@ -9,11 +9,14 @@ a.nav-link {
     height: -webkit-fill-available;
 }
 .form-control:focus,
-.btn:focus{
+.btn:focus,
+input[type=text]:focus{
+    outline-color: transparent !important;
     border-color: gainsboro !important;
     box-shadow: 0 0 0.2rem #8564043b !important;
 }
-.form-control:disabled {
+.form-control:disabled,
+.form-control:read-only {
     background-color: transparent !important;
     border-width: 0 0 1px !important;
     border-radius: 0;
