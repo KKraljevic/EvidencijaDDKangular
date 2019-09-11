@@ -9,7 +9,6 @@
       <th scope="col">Lokacija</th>
       <th scope="col">Testirano</th>
       <th scope="col"></th>
-      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -23,8 +22,6 @@
       <td>{{d.tested? 'DA' : 'NE'}}</td>
       <td><button class="btn btn-beige" [routerLink]="['/donations',d.id]">
         <span class="d-none d-lg-inline d-md-inline">Detalji </span><i class="fa fa-pencil-square-o"></i></button></td>
-      <td><button class="btn btn-beige">
-          <span class="d-none d-lg-inline d-md-inline">Arhiviraj</span><i class="fa fa-archive"></i></button></td>
     </tr>
   </tbody>
 </table>

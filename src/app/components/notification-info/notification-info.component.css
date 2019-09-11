@@ -1,0 +1,22 @@
+[type="file"] {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute !important;
+    white-space: nowrap;
+    width: 1px;
+}
+.img-notif {
+    border-style: dashed;
+    border-color: whitesmoke;
+    height:250px;
+    max-height: fit-content;
+    min-height: 250px;
+    object-fit: cover;
+    width: fit-content;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

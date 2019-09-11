@@ -7,18 +7,16 @@
       <th scope="col">KG</th>
       <th scope="col">Prebivalište</th>
       <th scope="col"></th>
-      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let d of donors; index as i ">
       <th scope="row">{{this.currentPage+i+1}}</th>
-      <td>{{d.firstName}} {{d.lastName}}</td>
+      <td>{{d.firstName}} {{d.lastName}}-{{d.active}}</td>
       <td>{{d.birthDate | date: 'dd-MM-yyyy'}}</td>
       <td>{{formatBloodType(d.blood)}}</td>
       <td>{{d.address}}</td>
       <td><button class="btn btn-beige" [routerLink]="['/donors',d.id]">Detalji <i class="fa fa-pencil-square-o"></i></button></td>
-      <td><button class="btn btn-beige" >Arhiviraj <i class="fa fa-archive"></i></button></td>
     </tr>
   </tbody>
 </table>

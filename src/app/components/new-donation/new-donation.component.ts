@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DonationService } from 'src/app/services/donation.service';
 import { User } from 'src/app/model/user';
 import { DonorService } from 'src/app/services/donor.service';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-new-donation',
@@ -64,7 +64,7 @@ export class NewDonationComponent implements OnInit {
     }
   }
 
-  onSubmit() { //mapiranje na donaciju i poziv servisa
+  onSubmit() { 
     this.submitted = true;
     let d;
     if (this.f.date.valid) {

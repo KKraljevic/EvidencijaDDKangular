@@ -13,16 +13,9 @@
   </li>
 </ul>
 </div>
-<ng-container [ngTemplateOutlet]="activeTab===0 ? personalInfo : userDonations"></ng-container>
+<ng-container [ngTemplateOutlet]="activeTab===0 ? personalInfo : userDonations" *ngIf="donorId"></ng-container>
 <ng-template #personalInfo>
-  <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
-    <div class="btn-group my-3" role="group">
-      <button type="button" class="btn btn-beige" (click)="editMode=!editMode">Izmjeni</button>
-      <button type="button" class="btn btn-beige ml-2">Arhiviraj</button>
-    </div>
-  </div>
-  <app-donator-info *ngIf="donor!=null" [mode]="editMode? 1 : 2" [user]="donor" (validSubmit)="submit($event)">
-  </app-donator-info>
+  <app-donator-info [donorId]="donorId" [mode]="1" (validSubmit)="submit($event)" (archiveSubmit)="archive($event)" [errorMessage]="errorMessage" [hasError]="hasError"></app-donator-info>
 </ng-template>
 <ng-template #userDonations>
 
@@ -30,7 +23,7 @@
   <ng-template #noDonationsMsg>
     <div class="mt-4 text-center">
         <h5>{{notFoundMsg}}</h5>
-        <button class="btn btn-beige">Dodaj donaciju <i class="fa fa-plus"></i></button>
+        <button class="btn btn-beige" [routerLink]="['/donations/new']">Dodaj donaciju <i class="fa fa-plus"></i></button>
     </div>
   </ng-template>
   <ul class="nav nav-pills justify-content-center py-4">

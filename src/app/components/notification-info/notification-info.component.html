@@ -1,0 +1,116 @@
+<div class="col-12 p-0">
+    <div class="title text-center">
+        <h3>{{editMode? titles[1] : titles[0]}}</h3>
+    </div>
+    <div hidden class="row mt-3">
+        <div class="col-md-12 form-group">
+            <div class="alert alert-danger" role="alert">
+                {{errMsg}}
+            </div>
+        </div>
+    </div>
+    <div>
+        <div *ngIf="editMode" class="btn-toolbar justify-content-end" role="toolbar"
+            aria-label="Toolbar with button groups">
+            <div class="btn-group my-3" role="group">
+                <button type="button" class="btn btn-danger d-block pull-right mr-3"
+                    (click)="deleteNotification()">Obriši <i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+        <form [formGroup]="notificationForm" (submit)="onSubmit()" class="px-10">
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label>Naslov: </label>
+                    <input formControlName="title" type="text" class="form-control" value="{{notification?.title}}"
+                        [ngClass]="{ 'is-invalid': submitted && f.title.errors }">
+                    <div *ngIf="submitted && !!f.title.errors" class="invalid-feedback">
+                        <div *ngIf="!!f.title.errors.required">Naslov je obavezno polje!</div>
+                        <div *ngIf="!!f.title.errors.minlength">Naslov je prekratak!</div>
+                        <div *ngIf="!!f.title.errors.maxlength">Nalsov je predug!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label>Datum:</label>
+                    <input formControlName="date" type="text" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.date.errors }">
+                    <small class="text-muted">Format datuma: 21-01-2000</small>
+                    <div *ngIf="submitted && !!f.date.errors" class="invalid-feedback">
+                        <div *ngIf="!!f.date.errors.required">Datum je obavezno polje!</div>
+                        <div *ngIf="!!f.date.errors.pattern">Datum je neispravnog formata!</div>
+                        <div *ngIf="!!f.date.errors.incorrect">Datum je neispravan!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label>Lokacija:</label>
+                    <input formControlName="location" type="text" placeholder="Naziv institucije, grad"
+                        class="form-control" value="{{notification?.location}}"
+                        [ngClass]="{ 'is-invalid': submitted && f.location.errors }">
+                    <div *ngIf="submitted && !!f.location.errors" class="invalid-feedback">
+                        <div *ngIf="!!f.location.errors.required">Lokacija je obavezno polje!</div>
+                        <div *ngIf="!!f.location.errors.maxlength">Lokacija je preduga!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="title text-center">
+                <h4>Opis</h4>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <textarea rows="5" formControlName="description" class="form-control mt-2"
+                        value="{{notification?.description}}"></textarea>
+                    <div *ngIf="submitted && !!f.description.errors" class="invalid-feedback d-block">
+                        <div *ngIf="!!f.description.errors.required">Opis je obavezno polje!</div>
+                        <div *ngIf="!!f.description.errors.maxlength">Opis je predug!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 align-center">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <img class="img-fluid img-notif" [src]="notifPhoto">
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-12 pt-4">
+                            <input id="profilePhoto" type="file" ng2FileSelect [uploader]="uploader"
+                                class="align-center">
+                            <div *ngIf="photoErrMsg" class="invalid-feedback d-block">{{photoErrMsg}}</div>
+                            <label for="profilePhoto" class="btn btn-beige align-center">Dodaj sliku <i
+                                    class="fa fa-plus"></i></label>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="savedMsg && loaded" class="row">
+                <div class="col-md-12 form-group">
+                    <div class="alert alert-success" role="alert">
+                        {{savedMsg}}
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="errMsg && loaded" class="row">
+                <div class="col-md-12 form-group">
+                    <div class="alert alert-danger" role="alert">
+                        {{errMsg}}
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <br>
+                <div class="col-md-6 col-12 form-group">
+                    <input type="submit" class="btn btn-beige w-100" value="SAČUVAJ">
+                </div>
+                <div *ngIf="editMode" class="col-md-6 col-12 form-group">
+                    <input type="button" class="btn btn-beige w-100" (click)="currentValues()" value="OTKAŽI">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

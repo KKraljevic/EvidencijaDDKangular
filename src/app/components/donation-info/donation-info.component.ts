@@ -3,7 +3,8 @@ import { DonationService } from 'src/app/services/donation.service';
 import { ActivatedRoute } from '@angular/router';
 import { Donation } from 'src/app/model/donation';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DatePipe, formatDate } from '@angular/common';
+import { formatDate } from '@angular/common';
+import { DonorService } from 'src/app/services/donor.service';
 
 @Component({
   selector: 'app-donation-info',
@@ -21,9 +22,10 @@ export class DonationInfoComponent implements OnInit {
 
   editMode: boolean = false;
   loaded: boolean = false;
-  errMsg: string;
+  invalidDateMsg: string = "Datum nije odgovarajući! Razmak između donacija mora biti 3 ili 4 mjeseca.";
+  errMsg: string = '';
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private donationsService: DonationService) { }
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private donorService: DonorService, private donationsService: DonationService) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -35,7 +37,6 @@ export class DonationInfoComponent implements OnInit {
     });
 
     this.donationForm = this.fb.group({
-      donor: ['', Validators.required],
       dose: ['', [Validators.required, Validators.min(350), Validators.max(450), Validators.maxLength(3), Validators.minLength(3)]],
       tested: ['', Validators.required],
       date: ['', [Validators.required, Validators.pattern("^[0-3]?\\d-[0,1]?\\d-\\d{4}$")]],
@@ -50,8 +51,10 @@ export class DonationInfoComponent implements OnInit {
   }
 
   changeMode() {
+    this.loaded = false;
     this.editMode = !this.editMode;
     if (this.editMode) {
+      this.errMsg = '';
       this.donationForm.enable();
     }
     else {
@@ -81,7 +84,20 @@ export class DonationInfoComponent implements OnInit {
     this.donationForm.get('additional').setValue(this.donation.additional);
 
     this.editMode = false;
+    this.loaded = false;
+    this.errMsg = '';
+    this.donationForm.disable();
+  }
 
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.donationForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
   }
 
   onSubmit() {
@@ -92,26 +108,57 @@ export class DonationInfoComponent implements OnInit {
       d = new Date(dmy[2], (<number>dmy[1] - 1), dmy[0]);
       if (d.getFullYear() == dmy[2] && d.getMonth() == (<number>dmy[1] - 1) && d.getDate() == dmy[0] && d.getTime() < Date.now()) {
         this.newDonation.date = d;
-        // odrediti donju i gornju granicu i rovjeriti ima li donacija u tom opsegu 
+        this.donationForm.setErrors({ 'date': null });
+        this.donationForm.updateValueAndValidity();
+
+        /*this.donorService.getDonationsInDateRange(this.donation.id, this.donation.donor.id, this.donation.donor.gender.startsWith('M'), this.newDonation.date).subscribe(data => {
+          console.log(data);
+          if ((<Donation[]>data).length) {
+            this.donationForm.get('date').setErrors({ 'unavailable': true });
+          }
+          else {
+            this.donationForm.setErrors({ 'date': null });
+            this.donationForm.updateValueAndValidity();
+          }
+        });*/
       }
       else {
         this.donationForm.get('date').setErrors({ 'incorrect': true });
       }
     }
+
     if (this.donationForm.invalid) {
+      console.log(this.donationForm.errors);
+      console.log(this.donationForm);
+      this.findInvalidControls();
       return;
     }
 
+    this.newDonation.id = this.donation.id;
     this.newDonation.donor = this.donation.donor;
     this.newDonation.dose = this.donationForm.get('dose').value;
     this.newDonation.tested = this.donationForm.get('tested').value;
     this.newDonation.systolic = this.donationForm.get('systolic').value;
     this.newDonation.diastolic = this.donationForm.get('diastolic').value;
-    this.newDonation.weight = this.donationForm.get('weigth').value;
+    this.newDonation.weight = this.donationForm.get('weight').value;
     this.newDonation.location = this.donationForm.get('location').value;
     this.newDonation.additional = this.donationForm.get('additional').value;
 
     console.log(this.newDonation);
+    this.loaded = false;
+
+    this.donationsService.updateDonation(this.donation.donor.gender.startsWith('M'), this.newDonation).subscribe(data => {
+      this.loaded = true;
+      console.log(data);
+      if (data != null) {
+        this.donation = <Donation>data;
+        this.errMsg = '';
+        this.currentValues();
+      }
+    },
+      error => {
+        this.errMsg = this.invalidDateMsg;
+      });
 
   }
 

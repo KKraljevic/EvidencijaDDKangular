@@ -12,6 +12,7 @@ import { SidemenuComponent } from './components/sidemenu/sidemenu.component';
 import { DonorsListComponent } from './components/donors-list/donors-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FileUploadModule } from 'ng2-file-upload';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { AuthenticationService } from './services/authentication.service';
 import { httpInterceptorProviders } from './services/auth-http-interceptor.service';
@@ -23,6 +24,8 @@ import { DonationsComponent } from './components/donations/donations.component';
 import { NewDonationComponent } from './components/new-donation/new-donation.component';
 import { ArchiveComponent } from './components/archive/archive.component';
 import { DonorsComponent } from './components/donors/donors.component';
+import { NotificationInfoComponent } from './components/notification-info/notification-info.component';
+import { UsersComponent } from './components/users/users.component';
 
 @NgModule({
   declarations: [
@@ -41,13 +44,16 @@ import { DonorsComponent } from './components/donors/donors.component';
     DonationsComponent,
     NewDonationComponent,
     ArchiveComponent,
-    DonorsComponent
+    DonorsComponent,
+    NotificationInfoComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    FileUploadModule,
     AngularFontAwesomeModule,
     AppRoutingModule
   ],

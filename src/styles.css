@@ -10,6 +10,7 @@ a.nav-link {
 }
 .form-control:focus,
 .btn:focus,
+button:focus,
 input[type=text]:focus{
     outline-color: transparent !important;
     border-color: gainsboro !important;
@@ -73,6 +74,9 @@ i {
 .sidebar-nav > .sidebar-brand a:hover {
     color: #fff;
     background: none;
+}
+.sidebar-heading {
+    border-bottom: 1px solid #0000003b;
 }
 .px-10{
     padding-left: 15%;

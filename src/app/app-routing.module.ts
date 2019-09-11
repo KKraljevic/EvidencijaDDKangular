@@ -10,6 +10,7 @@ import { DonationsComponent } from './components/donations/donations.component';
 import { NewDonationComponent } from './components/new-donation/new-donation.component';
 import { ArchiveComponent } from './components/archive/archive.component';
 import { DonorsComponent } from './components/donors/donors.component';
+import { NotificationInfoComponent } from './components/notification-info/notification-info.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,8 @@ const routes: Routes = [
   { path: 'donations/new', component: NewDonationComponent },
   { path: 'donations/:id', component: DonationInfoComponent },
   { path: 'donations', component: DonationsComponent },
+  { path: 'notifications/new', component: NotificationInfoComponent },
+  { path: 'notifications/:id', component: NotificationInfoComponent },
   { path: 'archive', component: ArchiveComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent }

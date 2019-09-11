@@ -1,3 +1,10 @@
+<div *ngIf="mode===1" class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group my-3" role="group">
+        <button type="button" class="btn btn-beige" (click)="changeMode()">Izmjeni</button>
+        <button *ngIf="user?.active" type="button" class="btn btn-beige ml-2" (click)="changeActiveState(false)">Arhiviraj</button>
+        <button *ngIf="!user?.active" type="button" class="btn btn-beige ml-2" (click)="changeActiveState(true)">Aktiviraj</button>
+    </div>
+</div>
 <form [formGroup]="donorInfoForm" (ngSubmit)="onSubmit()" class="px-10">
     <div class="row">
         <div class="col-md-12 form-group">
@@ -42,7 +49,8 @@
         <div class="col-md-6">
             <div class="dropdown">
                 <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownPol" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" [disabled]="mode===2">{{donorInfoForm.get('gender').value | titlecase}}
+                    aria-haspopup="true" aria-expanded="false"
+                    [disabled]="mode===2">{{donorInfoForm.get('gender').value | titlecase}}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownPol">
                     <a class="dropdown-item" *ngFor="let p of pol"
@@ -56,9 +64,14 @@
         <div class="col-md-12 form-group">
             <label>Datum rođenja</label>
             <input type="text" formControlName="birthDate" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.birthDate.errors }" value="{{donorInfoForm.get('birthDate').value | date: 'dd-MM-yyyy'}}"/>
+                [ngClass]="{ 'is-invalid': submitted && f.birthDate.errors }"
+                value="{{donorInfoForm.get('birthDate').value}}" />
+            <small class="text-muted">Format datuma: 21-01-2000</small>
             <div *ngIf="submitted && !!f.birthDate.errors" class="invalid-feedback">
                 <div *ngIf="!!f.birthDate.errors.required">Datum rođenja je obavezno polje</div>
+                <div *ngIf="!!f.birthDate.errors.pattern">Datum je neispravnog formata!</div>
+                <div *ngIf="!!f.birthDate.errors.incorrect">Datum je neispravan!</div>
+                <div *ngIf="!!f.birthDate.errors.age">Starost davaoca je između 18 i 65 godina!</div>
             </div>
         </div>
     </div>
@@ -71,6 +84,8 @@
                 <div *ngIf="!!f.jmb.errors.required">Matični broj je obavezno polje</div>
                 <div *ngIf="!!f.jmb.errors.minlength">Matični broj je prekratko</div>
                 <div *ngIf="!!f.jmb.errors.maxlength">Matični broj je predugo</div>
+                <div *ngIf="!!f.jmb.errors.incorrect">Matični broj je neispravan</div>
+                <div *ngIf="!!f.jmb.errors.pattern">Matični broj sadrži samo brojeve</div>
             </div>
         </div>
     </div>
@@ -81,7 +96,8 @@
         <div class="col-md-6">
             <div class="dropdown">
                 <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" [disabled]="mode===2">{{donorInfoForm.get('bloodType').value}}
+                    aria-haspopup="true" aria-expanded="false"
+                    [disabled]="mode===2">{{donorInfoForm.get('bloodType').value}}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                     <a class="dropdown-item" *ngFor="let bt of bloodTypes"
@@ -97,6 +113,9 @@
                 [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
             <div *ngIf="submitted && !!f.phone.errors" class="invalid-feedback">
                 <div *ngIf="!!f.phone.errors.required">Broj telefona je obavezno polje</div>
+                <div *ngIf="!!f.phone.errors.minlength">Broj telefona je prektratak</div>
+                <div *ngIf="!!f.phone.errors.maxlength">Broj telefona je predug</div>
+                <div *ngIf="!!f.phone.errors.pattern">Broj telefona ne može da sadrži slova</div>
             </div>
         </div>
     </div>
@@ -107,6 +126,8 @@
                 [ngClass]="{ 'is-invalid': submitted && f.address.errors }" />
             <div *ngIf="submitted && !!f.address.errors" class="invalid-feedback">
                 <div *ngIf="!!f.address.errors.required">Adresa je obavezno polje</div>
+                <div *ngIf="!!f.address.errors.minlength">Adresa je prekratka</div>
+                <div *ngIf="!!f.address.errors.maxlength">Adresa je preduga</div>
             </div>
         </div>
     </div>
@@ -116,7 +137,9 @@
             <input type="text" formControlName="profession" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.profession.errors }" />
             <div *ngIf="submitted && !!f.profession.errors" class="invalid-feedback">
-                <div *ngIf="!!f.profession.errors.required">Datum rođenja je obavezno polje</div>
+                <div *ngIf="!!f.profession.errors.required">Zanimanje je obavezno polje</div>
+                <div *ngIf="!!f.profession.errors.minlength">Zanimanje je prekratko</div>
+                <div *ngIf="!!f.profession.errors.maxlength">Zanimanje je predugo</div>
             </div>
         </div>
     </div>
@@ -127,7 +150,8 @@
                 [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
             <div *ngIf="submitted && !!f.email.errors" class="invalid-feedback">
                 <div *ngIf="!!f.email.errors.required">Email je obavezno polje</div>
-                <div *ngIf="!!f.email.errors.email">Email nije ispravna</div>
+                <div *ngIf="!!f.email.errors.email">Email nije ispravan</div>
+                <div *ngIf="!!f.email.errors.maxlength">Email je predug</div>
             </div>
         </div>
     </div>
@@ -138,6 +162,15 @@
                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
             <div *ngIf="submitted && !!f.password.errors" class="invalid-feedback">
                 <div *ngIf="!!f.password.errors.required">Lozinka je obavezno polje</div>
+                <div *ngIf="!!f.password.errors.minlength">Lozinka je prekratka</div>
+                <div *ngIf="!!f.password.errors.maxlength">Lozinka je preduga</div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="errorMessage!='' && hasError" class="row">
+        <div class="col-md-12 form-group">
+            <div class="alert alert-danger" role="alert">
+                {{errorMessage}}
             </div>
         </div>
     </div>
@@ -150,11 +183,13 @@
             </div>
         </ng-template>
         <ng-template #edit>
-            <div *ngIf="mode===1" class="col-md-6 col-12">
-                <input type="submit" class="btn btn-beige w-100" value="SAČUVAJ">
-            </div>
-            <div *ngIf="mode===1" class="col-md-6 col-12 form-group">
-                <input type="button" class="btn btn-beige w-100" (click)="currentValues(user)" value="OTKAŽI">
+            <div *ngIf="editMode">
+                <div class="col-md-6 col-12">
+                    <input type="submit" class="btn btn-beige w-100" value="SAČUVAJ">
+                </div>
+                <div class="col-md-6 col-12 form-group">
+                    <input type="button" class="btn btn-beige w-100" (click)="currentValues(user)" value="OTKAŽI">
+                </div>
             </div>
         </ng-template>
     </div>

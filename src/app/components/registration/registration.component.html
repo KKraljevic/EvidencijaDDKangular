@@ -2,5 +2,5 @@
   <div class="title text-center">
     <h3>Registracija</h3>
   </div>
-  <app-donator-info [user]="null" [mode]="0" (validSubmit)="register($event)"></app-donator-info>
+  <app-donator-info [mode]="0" (validSubmit)="register($event)" [errorMessage]="errorMessage" [hasError]="hasError"></app-donator-info>
 </div>

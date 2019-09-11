@@ -1,0 +1,64 @@
+<div class="title text-center">
+    <h3>Lista dobrovoljnih davalaca krvi</h3>
+</div>
+<div>
+    <form [formGroup]="searchForm" (ngSubmit)="searchItems()" class="form-inline justify-content-center mt-3"
+        [ngClass]="{ 'is-invalid': submitted && this.searchForm?.search?.errors }">
+        <input formControlName="search" type="text" autocomplete="off" class="form-control mr-sm-2 col-4" type="search"
+            placeholder="Pretraga" aria-label="Pretraga">
+        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Pretraži</button>
+    </form>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">R.br</th>
+            <th scope="col">Ime i prezime</th>
+            <th scope="col">Datum rodjenja</th>
+            <th scope="col">KG</th>
+            <th scope="col">Odobrenja</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let d of donors; index as i ">
+            <th scope="row">{{this.currentPage+i+1}}</th>
+            <td>{{d.firstName}} {{d.lastName}}-{{d.active}}</td>
+            <td>{{d.birthDate | date: 'dd-MM-yyyy'}}</td>
+            <td>{{formatBloodType(d.blood)}}</td>
+            <td>{{d.address}}</td>
+            <td><button class="form-control btn btn-beige" (click)="openModal(template)">
+                    <i class="fa fa-trash"></i></button>
+                <ng-template #template>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Izmjeni odobrenja</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            <p>{{d.firstName}} {{d.lastName}}</p>
+                            <p>{{item.name}}</p>
+                            <button *ngIf="deleted; else YN" type="button" class="btn btn-purple-fill mr-3"
+                                (click)="ok()">OK</button>
+                            <ng-template #YN>
+                                <button type="button" class="btn btn-purple-fill mr-3"
+                                    (click)="confirm(item.id)">Yes</button>
+                                <button type="button" class="btn btn-purple-outline" (click)="decline()">No</button>
+
+                            </ng-template>
+                        </div>
+                    </div>
+                </ng-template>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<ul class="nav nav-pills justify-content-center py-4">
+    <li *ngIf="currentPage>0" class="nav-item">
+        <a class="btn btn-beige nav-link" (click)="loadDonors(currentPage-1)">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+    </li>
+    <li *ngIf="currentPage+1<totalPages" class="nav-item">
+        <a class="btn btn-beige nav-link" (click)="loadDonors(currentPage+1)">
+            <i class="fa fa-chevron-right" aria-hidden="true"></i> </a>
+    </li>
+</ul>

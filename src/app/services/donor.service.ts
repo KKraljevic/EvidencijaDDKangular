@@ -51,13 +51,14 @@ export class DonorService {
       else {
         bloodType = bloodType.replace('-', 'NEG');
       }
+      params = params.append('blood', bloodType);
       switch (tab) {
         case 0:
           return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType, { params: params });
         case 1:
-          return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType + '/active/available', { params: params });
+          return this.http.get(this.springURL + '/api/donators/active/available', { params: params });
         case 2:
-          return this.http.get(this.springURL + '/api/donators/bloodType/' + bloodType + '/active/unavailable', { params: params });
+          return this.http.get(this.springURL + '/api/donators/active/unavailable', { params: params });
       }
     }
   }
@@ -91,6 +92,17 @@ export class DonorService {
     let params = new HttpParams();
     params = Number.isInteger(page) ? params.append('page', page.toString()) : params;
     return this.http.get(this.springURL + '/api/donators/' + donorId + '/donations', { params: params });
+  }
+
+  public deactivateDonor(donorId: number) {
+    return this.http.put(this.springURL + '/api/donators/' + donorId + '/deactivate', {});
+  }
+
+  public getDonationsInDateRange(id: number, donorId: number, gender: boolean, date: Date) {
+    let params = new HttpParams();
+    params = params.append('gender', gender.toString());
+    params = params.append('centralDate', date.toLocaleDateString());
+    return this.http.get(this.springURL + '/api/donators/' + donorId + '/donations/' + id + '/check', { params: params });
   }
 
   public addDonation(donorId: number, donation: Donation) {

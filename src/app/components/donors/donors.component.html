@@ -23,21 +23,21 @@
                 <a class="dropdown-item" *ngFor="let st of sortTypes" (click)="changeSortOrder(st)">{{st}}</a>
             </div>
         </div>
+        <div class="dropdown">
+                <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false" >{{selectedDirection || 'Smjer'}}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                    <a class="dropdown-item" (click)="changeSortDirection('Rastući')">Rastući</a>
+                    <a class="dropdown-item" (click)="changeSortDirection('Opadajući')">Opadajući</a>
+                </div>
+            </div>
         <div *ngIf="selectedSorting==='Krvna grupa'" class="dropdown">
             <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">{{selectedBloodType}}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <a class="dropdown-item" *ngFor="let bt of bloodTypes" (click)="chooseBloodType(bt)">{{bt}}</a>
-            </div>
-        </div>
-        <div *ngIf="selectedSorting!='Krvna grupa'" class="dropdown">
-            <button class="btn btn-dd dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" >{{selectedDirection || 'Smjer'}}
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-                <a class="dropdown-item" (click)="changeSortDirection('Rastući')">Rastući</a>
-                <a class="dropdown-item" (click)="changeSortDirection('Opadajući')">Opadajući</a>
             </div>
         </div>
     </div>

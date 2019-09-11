@@ -9,7 +9,7 @@ import { Donation } from '../model/donation';
 export class DonationService {
 
   springURL: string = 'http://localhost:8080';
-  sortCriterias = ["donor.firstName", "donor.lastName", "donor.birthDate", "location", "donor.bloodType"];
+  sortCriterias = ["donor.firstName", "donor.lastName", "date", "location", "donor.bloodType"];
   sortDirections = [",desc", ",asc"];
 
   constructor(private http: HttpClient) { }
@@ -66,5 +66,11 @@ export class DonationService {
     else {
       return this.http.get(this.springURL + '/api/donations', { params: params })
     }
+  }
+
+  public updateDonation(gender: boolean, updatedDonation: Donation) {
+    let params = new HttpParams();
+    params = params.append('gender', gender.toString());
+    return this.http.put(this.springURL+'/api/donations/'+updatedDonation.id, updatedDonation, { params: params });
   }
 }

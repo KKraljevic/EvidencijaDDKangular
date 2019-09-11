@@ -15,7 +15,7 @@ export class DonationsComponent implements OnInit {
 
   bloodTypes: string[] = ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'];
   selectedBloodType: string;
-  sortTypes: string[] = ['Ime', 'Prezime', 'Godine', 'Lokacija', 'Krvna grupa'];
+  sortTypes: string[] = ['Ime', 'Prezime', 'Datum', 'Lokacija', 'Krvna grupa'];
   selectedSorting: string;
   selectedDirection: string;
 

@@ -1,68 +1,66 @@
-    <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-            <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['/']"><i class="fa fa-bell"></i> Obajveštenja</a>
-            </li>
-            <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link align-items-center" [routerLink]="['/donors']"> <i class="fa fa-user"></i> Davaoci</a>
-            </li>
-            <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['/donations']"><i class="fa fa-tint"></i> Donacije</a>
-            </li>
-            <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/archive']"><i class="fa fa-archive"></i> Arhiva</a>
-                </li>
-            <li *ngIf="loggedUserId" class="nav-item" routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['/donors', loggedUserId]"><i class="fa fa-id-card-o"></i> Moj profil</a>
-            </li>
-        </ul>
-
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Dodatne informacije</span>
-        </h6>
-        <hr>
-        <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-file-text">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                    </svg>
-                    Pravila za dobrovoljne davaoce
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-file-text">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                    </svg>
-                    Procedura darivanja krvi
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-file-text">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                    </svg>
-                    Lista transfuzioloških službi
-                </a>
-            </li>
-        </ul>
-    </div>
+<div class="sidebar-sticky navbar-expand-md navbar-collapse collapse align-items-baseline flex-column" id="mySideBar">
+    <ul class="nav flex-column">
+        <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="['/']"><i class="fa fa-bell"></i> Obajveštenja</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link align-items-center" [routerLink]="['/donors']"> <i class="fa fa-user"></i> Davaoci</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="['/donations']"><i class="fa fa-tint"></i> Donacije</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/archive']"><i class="fa fa-archive"></i> Arhiva</a>
+        </li>
+        <li *ngIf="loggedUserId" class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="['/donors', loggedUserId]"><i class="fa fa-id-card-o"></i> Moj profil</a>
+        </li>
+    </ul>
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 pb-1 mt-4 mb-1 text-muted">
+        <span>Dodatne informacije</span>
+    </h6>
+    <ul class="nav flex-column mb-2">
+        <li class="nav-item">
+            <a class="nav-link text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-file-text">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Pravila za dobrovoljne davaoce
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-file-text">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Procedura darivanja krvi
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-file-text">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Lista transfuzioloških službi
+            </a>
+        </li>
+    </ul>
+</div>

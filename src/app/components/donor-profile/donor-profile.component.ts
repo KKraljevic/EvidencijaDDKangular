@@ -3,7 +3,6 @@ import { DonorService } from 'src/app/services/donor.service';
 import { User } from 'src/app/model/user';
 import { ActivatedRoute } from '@angular/router';
 import { Donation } from 'src/app/model/donation';
-import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
 import { Role } from 'src/app/model/role';
 
 @Component({
@@ -14,6 +13,9 @@ import { Role } from 'src/app/model/role';
 export class DonorProfileComponent implements OnInit {
 
   activeTab: number = 0;
+
+  errorMessage: string;
+  hasError: boolean = false;
 
   donorId: number;
   donor: User;
@@ -34,30 +36,21 @@ export class DonorProfileComponent implements OnInit {
       this.donorId = Number.parseInt(params.get("id"));
       if (params.has('tab')) {
         let tab = params.get('tab');
-        if(tab==='info'){
-          this.activeTab=0;
+        if (tab === 'info') {
+          this.activeTab = 0;
         }
-        else if(tab === 'donacije') {
-          this.activeTab=1;
+        else if (tab === 'donacije') {
+          this.activeTab = 1;
         }
       }
       else {
-        this.activeTab=0;
+        this.activeTab = 0;
       }
-
-      this.donorService.getDonor(this.donorId).subscribe(data => {
-        this.donor = data;
-        console.log(data);
-
-        if(this.activeTab===1){
-          this.loadUserDonations(0);
-        }
-      },
-        error => {
-          this.notFoundMsg = "Traženi davalac nije pronađen!";
-        });
-
+      if (this.activeTab === 1) {
+        this.loadUserDonations(0);
+      }
     });
+
   }
 
   loadUserDonations(page: number) {
@@ -80,19 +73,25 @@ export class DonorProfileComponent implements OnInit {
   submit(userInfo: User) {
     console.log(userInfo);
     userInfo.id = this.donorId;
-    userInfo.roles=this.donor.roles;
-    if(userInfo.roles===null || !userInfo.roles.length) {
-      let role=new Role();
-      role.id=0;
-      role.name='ROLE_USER'
+    if (userInfo.roles === null) {
+      let role = new Role();
+      role.id = 0;
+      role.name = 'ROLE_USER'
       userInfo.roles.push(role);
     }
+    this.loaded=false;
     this.donorService.updateDonor(userInfo).subscribe(data => {
       console.log('Update resp:' + data);
+      this.loaded=true;
+      this.hasError=false;
     },
       error => {
         this.errorMsg = error.error.message;
+        this.hasError=true;
       });
+  }
 
+  archive(userInfo: User) {
+    this.submit(userInfo);
   }
 }
