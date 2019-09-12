@@ -1,8 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { DonorService } from 'src/app/services/donor.service';
 import { User } from 'src/app/model/user';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Role } from 'src/app/model/role';
 
 @Component({
   selector: 'app-users',
@@ -13,12 +14,6 @@ export class UsersComponent implements OnInit {
 
   donors: User[] = [];
 
-  bloodTypes: string[] = ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'];
-  selectedBloodType: string;
-  sortTypes: string[] = ['Ime', 'Prezime', 'Godine', 'Prebivalište', 'Krvna grupa'];
-  selectedSorting: string;
-  selectedDirection: string;
-
   activeTab: number = 0;
   totalPages: number;
   currentPage: number = 0;
@@ -28,10 +23,17 @@ export class UsersComponent implements OnInit {
 
   notFoundMsg: string;
   loaded: boolean = false;
-  
+
   modalRef: BsModalRef;
   msg: string;
-  deleted:boolean=false;
+  deleted: boolean = false;
+
+  form: FormGroup;
+  roles = [
+    { id: 1, name: 'Član' },
+    { id: 2, name: 'Menadžer' },
+    { id: 3, name: 'Administrator' }
+  ];
 
   constructor(private donorService: DonorService, private modalService: BsModalService, private fb: FormBuilder) { }
 
@@ -40,9 +42,28 @@ export class UsersComponent implements OnInit {
       search: ['', [Validators.maxLength(30)]]
     });
 
-    this.selectedSorting = this.sortTypes[0];
-    this.selectedDirection = 'Opadajući';
-    this.loadDonors(0, 0);
+    this.form = this.fb.group({
+      roles: new FormArray([])
+    });
+
+    this.loadDonors(0);
+    this.addCheckboxes();
+    console.log(this.form.controls['roles']);
+  }
+
+  private addCheckboxes() {
+    this.roles.map((o, i) => {
+      const control = new FormControl(); // if first item set to true, else false
+      (this.form.controls.roles as FormArray).push(control);
+    });
+  }
+
+  submit() {
+    const selectedRolesIds = this.form.value.roles
+      .map((v, i) => v ? this.roles[i].id : null)
+      .filter(v => v !== null);
+    console.log(selectedRolesIds);
+    return selectedRolesIds;
   }
 
   formatBloodType(bt: string) {
@@ -54,17 +75,28 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  loadDonors(tab: number, page?: number) {
-    this.activeTab = (tab !== undefined) ? tab : this.activeTab;
-    this.activeTab = this.activeTab > 2 ? 0 : this.activeTab;
+  formatRoles(roles: Role[]) {
+    if (roles.length > 0) {
+      let rolesArray = '';
+      for (let i = 0; i < roles.length; i++) {
+        rolesArray += this.roles[roles[i].id - 1].name + ',';
+      }
+      return rolesArray;
+    }
+    else {
+      return "/";
+    }
+  }
+
+  loadDonors(page: number) {
 
     this.searchForm.get('search').setValue('');
 
     this.loaded = false;
 
-    this.donorService.getDonors(this.activeTab, true, page).subscribe(data => {
+    this.donorService.getUsers(page).subscribe(data => {
       if (data['totalElements'] === 0) {
-        this.notFoundMsg = "Davaoci nisu pronađeni!";
+        this.notFoundMsg = "Korisnici nisu pronađeni!";
       }
       this.donors = data['content'];
       this.totalPages = data['totalPages'];
@@ -81,34 +113,60 @@ export class UsersComponent implements OnInit {
     if (this.searchForm.invalid) {
       return;
     }
-    //this.router.navigate(['/donations/search/', this.searchForm.get('search').value]);
-
-    this.selectedSorting = this.sortTypes[0];
-    this.selectedDirection = 'Opadajući';
-    this.selectedBloodType = undefined;
 
     this.loaded = false;
 
-    this.donorService.findDonors(this.searchForm.get('search').value, true, 0, 0).subscribe(data => {
+    if (this.searchForm.get('search').value === null || this.searchForm.get('search').value === '') {
+      this.loadDonors(0);
+    }
+    this.donorService.findDonors(this.searchForm.get('search').value, undefined, 0, 0).subscribe(data => {
       if (data['totalElements'] === 0) {
-        this.notFoundMsg = "Donacije nisu pronađene!";
+        this.notFoundMsg = "Korisnici nisu pronađeni!";
       }
       this.donors = data['content'];
       this.totalPages = data['totalPages'];
       this.currentPage = data['number'];
 
-      this.activeTab = 0;
       this.loaded = true;
     });
   }
 
-  openModal(template: TemplateRef<any>) {
-    this.msg="Are you sure you want to delete this item?";
-    this.deleted=false;
+  openDeleteModal(template: TemplateRef<any>) {
+    this.msg = "Jeste li sigurni da želite da obrišete ovog korisnika?";
+    this.deleted = false;
     this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
   }
+  openEditModal(template: TemplateRef<any>, userRoles: Role[]) {
+    this.msg = "Izaberite nova odobrenja:";
+    if (userRoles != undefined || userRoles != null) {
+      userRoles.map((r, i) => (this.form.get('roles') as FormArray).controls[r.id - 1].setValue(true));
+    }
+    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
 
-  confirm(id: number): void {
+  }
+
+  confirmEdit(user: User) {
+    console.log(user);
+    let newRoles = this.submit();
+    user.roles = [];
+    for (let i = 0; i < newRoles.length; i++) {
+      let role = new Role();
+      role.id = newRoles[i];
+      user.roles.push(role);
+    }
+    console.log(user);
+    this.donorService.updateDonor(user).subscribe(data => {
+      console.log('Update resp:' + data);
+      this.loaded = true;
+      this.donors.map((u) => { if (u.id === (<User>data).id) { u = <User>data; } });
+    },
+      error => {
+        alert(error.error.message);
+      });
+    this.ok();
+  }
+
+  confirmDelete(id: number): void {
     /*this.itemService.deleteItem(id).toPromise().then(resp => {
       console.log("deleted");
       this.deleteConfirmed.emit(true);
@@ -116,10 +174,19 @@ export class UsersComponent implements OnInit {
       error => this.modalRef.setClass('is-invalid');
     }
     );*/
-    this.msg="Successfully deleted!";
-    this.deleted=true;
+    this.donorService.deleteDonor(id).toPromise().then(resp => {
+      console.log("deleted");
+      // this.donors.map((u, i) => { if (u.id === id) { this.donors.splice(i, 1);} });
+      this.loadDonors(this.currentPage);
+      this.modalRef.hide(),
+        error => this.modalRef.setClass('is-invalid');
+    }
+    );
+
+    this.msg = "Successfully deleted!";
+    this.deleted = true;
   }
-  ok(){
+  ok() {
     this.modalRef.hide();
   }
   decline(): void {

@@ -12,6 +12,9 @@
         <li class="nav-item">
             <a class="nav-link" [routerLink]="['/archive']"><i class="fa fa-archive"></i> Arhiva</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/users']"><i class="fa fa-users"></i> Korisnici</a>
+        </li>
         <li *ngIf="loggedUserId" class="nav-item" routerLinkActive="active">
             <a class="nav-link" [routerLink]="['/donors', loggedUserId]"><i class="fa fa-id-card-o"></i> Moj profil</a>
         </li>

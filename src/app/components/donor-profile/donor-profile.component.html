@@ -15,7 +15,7 @@
 </div>
 <ng-container [ngTemplateOutlet]="activeTab===0 ? personalInfo : userDonations" *ngIf="donorId"></ng-container>
 <ng-template #personalInfo>
-  <app-donator-info [donorId]="donorId" [mode]="1" (validSubmit)="submit($event)" (archiveSubmit)="archive($event)" [errorMessage]="errorMessage" [hasError]="hasError"></app-donator-info>
+  <app-donator-info #donorInfo [donorId]="donorId" [mode]="1" (validSubmit)="submit($event)" (archiveSubmit)="archive($event)" [errorMessage]="errorMessage" [hasError]="hasError"></app-donator-info>
 </ng-template>
 <ng-template #userDonations>
 

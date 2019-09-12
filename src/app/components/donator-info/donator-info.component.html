@@ -183,11 +183,11 @@
             </div>
         </ng-template>
         <ng-template #edit>
-            <div *ngIf="editMode">
-                <div class="col-md-6 col-12">
+            <div *ngIf="editMode" class="form-check-inline w-100 mx-0">
+                <div class="col-12 col-md-6">
                     <input type="submit" class="btn btn-beige w-100" value="SAČUVAJ">
                 </div>
-                <div class="col-md-6 col-12 form-group">
+                <div class="col-12 col-md-6">
                     <input type="button" class="btn btn-beige w-100" (click)="currentValues(user)" value="OTKAŽI">
                 </div>
             </div>

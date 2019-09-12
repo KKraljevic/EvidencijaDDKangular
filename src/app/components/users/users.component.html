@@ -1,8 +1,8 @@
 <div class="title text-center">
-    <h3>Lista dobrovoljnih davalaca krvi</h3>
+    <h3>Lista svih korisničkih naloga</h3>
 </div>
 <div>
-    <form [formGroup]="searchForm" (ngSubmit)="searchItems()" class="form-inline justify-content-center mt-3"
+    <form [formGroup]="searchForm" (ngSubmit)="searchItems()" class="form-inline justify-content-center my-3"
         [ngClass]="{ 'is-invalid': submitted && this.searchForm?.search?.errors }">
         <input formControlName="search" type="text" autocomplete="off" class="form-control mr-sm-2 col-4" type="search"
             placeholder="Pretraga" aria-label="Pretraga">
@@ -18,6 +18,7 @@
             <th scope="col">KG</th>
             <th scope="col">Odobrenja</th>
             <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -26,23 +27,47 @@
             <td>{{d.firstName}} {{d.lastName}}-{{d.active}}</td>
             <td>{{d.birthDate | date: 'dd-MM-yyyy'}}</td>
             <td>{{formatBloodType(d.blood)}}</td>
-            <td>{{d.address}}</td>
-            <td><button class="form-control btn btn-beige" (click)="openModal(template)">
-                    <i class="fa fa-trash"></i></button>
-                <ng-template #template>
+            <td>{{formatRoles(d.roles)}}</td>
+            <td><button class="btn btn-beige" (click)="openEditModal(editModal, d.roles)">
+                    <i class="fa fa-pencil-square-o"></i></button>
+                <ng-template #editModal>
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Izmjeni odobrenja</h5>
                         </div>
                         <div class="modal-body text-center">
                             <p>{{d.firstName}} {{d.lastName}}</p>
-                            <p>{{item.name}}</p>
+                            <form [formGroup]="form" (ngSubmit)="confirmEdit(d)">
+                                <div class="col-12" formArrayName="roles"
+                                    *ngFor="let r of form.controls['roles'].controls; let i = index">
+                                    <label>
+                                        <input type="checkbox" [formControlName]="i">
+                                        {{roles[i]?.name}}
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-beige mr-3">SAČUVAJ</button>
+                                <button type="button" class="btn btn-secondary" (click)="decline()">OTKAŽI</button>
+                            </form>
+                        </div>
+                    </div>
+                </ng-template>
+            </td>
+            <td><button class="btn btn-danger" (click)="openDeleteModal(deleteModal)">
+                    <i class="fa fa-trash"></i></button>
+                <ng-template #deleteModal>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Izbriši korisnika</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            <h6>{{msg}}</h6>
+                            <p>{{d.firstName}} {{d.lastName}}</p>
                             <button *ngIf="deleted; else YN" type="button" class="btn btn-purple-fill mr-3"
                                 (click)="ok()">OK</button>
                             <ng-template #YN>
                                 <button type="button" class="btn btn-purple-fill mr-3"
-                                    (click)="confirm(item.id)">Yes</button>
-                                <button type="button" class="btn btn-purple-outline" (click)="decline()">No</button>
+                                    (click)="confirmDelete(d.id)">Da</button>
+                                <button type="button" class="btn btn-purple-outline" (click)="decline()">Ne</button>
 
                             </ng-template>
                         </div>

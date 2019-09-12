@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { DonorService } from 'src/app/services/donor.service';
 import { User } from 'src/app/model/user';
 import { ActivatedRoute } from '@angular/router';
 import { Donation } from 'src/app/model/donation';
 import { Role } from 'src/app/model/role';
+import { DonatorInfoComponent } from '../donator-info/donator-info.component';
 
 @Component({
   selector: 'app-donor-profile',
@@ -12,6 +13,8 @@ import { Role } from 'src/app/model/role';
 })
 export class DonorProfileComponent implements OnInit {
 
+  @ViewChild('donorInfo',{static: false}) private donorInfoComponent: DonatorInfoComponent;
+
   activeTab: number = 0;
 
   errorMessage: string;
@@ -19,6 +22,7 @@ export class DonorProfileComponent implements OnInit {
 
   donorId: number;
   donor: User;
+  @Output() modeChanged  = new EventEmitter();
   editMode: boolean = false;
 
   donations: Donation[] = [];
@@ -72,10 +76,11 @@ export class DonorProfileComponent implements OnInit {
 
   submit(userInfo: User) {
     console.log(userInfo);
+    console.log(this.donor);
     userInfo.id = this.donorId;
-    if (userInfo.roles === null) {
+    if (userInfo.roles === null || userInfo.roles===[]) {
       let role = new Role();
-      role.id = 0;
+      role.id = 1;
       role.name = 'ROLE_USER'
       userInfo.roles.push(role);
     }
@@ -84,6 +89,9 @@ export class DonorProfileComponent implements OnInit {
       console.log('Update resp:' + data);
       this.loaded=true;
       this.hasError=false;
+      this.donor=<User>data;
+      this.editMode=false;
+      this.donorInfoComponent.changeMode();
     },
       error => {
         this.errorMsg = error.error.message;

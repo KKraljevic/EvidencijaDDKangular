@@ -4,8 +4,8 @@ import { User } from 'src/app/model/user';
 import { Router } from '@angular/router';
 import { DonorService } from 'src/app/services/donor.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { isNullOrUndefined } from 'util';
 import { formatDate, TitleCasePipe } from '@angular/common';
+import { Role } from 'src/app/model/role';
 
 @Component({
   selector: 'app-donator-info',
@@ -19,14 +19,16 @@ export class DonatorInfoComponent implements OnInit {
   //mode: 0-register, 1-profile
   @Input() mode: number;
   @Input() donorId: number;
+  @Input() modeChanged: boolean;
   @Input() errorMessage: string = '';
   @Input() hasError: boolean = false;
+  editMode: boolean = false;
+
   user: User;
   newUser: User = new User();
 
   donorInfoForm: FormGroup;
   submitted = false;
-  editMode: boolean = false;
   loaded: boolean = false;
   invalidDateMsg: string = "";
   errMsg: string = '';
@@ -81,7 +83,7 @@ export class DonatorInfoComponent implements OnInit {
 
   }
 
-  changeMode() {
+  changeMode(event?) {
     this.loaded = false;
     this.editMode = !this.editMode;
     if (this.editMode) {
@@ -231,7 +233,6 @@ export class DonatorInfoComponent implements OnInit {
     this.newUser.profession = this.donorInfoForm.get('profession').value;
     this.newUser.jmb = this.donorInfoForm.get('jmb').value;
     this.newUser.address = this.donorInfoForm.get('address').value;
-    this.newUser.active = true;
 
     if (this.donorInfoForm.get('bloodType').value.endsWith('+')) {
       this.newUser.blood = this.donorInfoForm.get('bloodType').value.replace('+', 'POS');
@@ -243,6 +244,12 @@ export class DonatorInfoComponent implements OnInit {
     if (this.mode === 0) {
       this.newUser.password = this.donorInfoForm.get('password').value;
       this.newUser.active = true;
+      this.newUser.roles = [];
+      this.newUser.roles.push(new Role());
+      this.newUser.roles[0].id=1;
+    }
+    if(this.mode===1){
+      this.newUser.roles=this.user.roles;
     }
     if (validJMB) {
       this.user = this.newUser;

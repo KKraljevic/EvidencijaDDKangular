@@ -26,6 +26,9 @@ import { ArchiveComponent } from './components/archive/archive.component';
 import { DonorsComponent } from './components/donors/donors.component';
 import { NotificationInfoComponent } from './components/notification-info/notification-info.component';
 import { UsersComponent } from './components/users/users.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -54,9 +57,12 @@ import { UsersComponent } from './components/users/users.component';
     FormsModule,
     HttpClientModule,
     FileUploadModule,
+    NgbModule,
+    ModalModule.forRoot(),
     AngularFontAwesomeModule,
     AppRoutingModule
   ],
+  exports: [ModalModule],
   providers: [AuthenticationService,httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
